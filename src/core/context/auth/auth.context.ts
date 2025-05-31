@@ -28,20 +28,17 @@ export interface AuthContextType {
     password: string
   ) => Promise<
     | {
-        data:
-          | {
-              user: User
-              session: Session
-              weakPassword?: WeakPassword
-            }
-          | {
-              user: null
-              session: null
-              weakPassword?: null
-            }
-        error: AuthError | null
+        data: null
+        error: string
       }
-    | undefined
+    | {
+        data: {
+          user: User
+          session: Session
+          weakPassword?: WeakPassword
+        }
+        error: null
+      }
   >
   signOut: () => Promise<void>
 }

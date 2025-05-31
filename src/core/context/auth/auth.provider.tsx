@@ -36,11 +36,12 @@ export const AuthContextProvider = (props: Props) => {
 
       if (error != null) {
         console.error(error)
+        return { data: null, error: error.message }
       }
 
-      return { data, error }
+      return { data, error: null }
     } catch (error) {
-      console.error(error)
+      return { data: null, error: 'Something went wrong' }
     }
   }
 
