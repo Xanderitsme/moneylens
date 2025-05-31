@@ -1,4 +1,5 @@
 import { Button } from '@/core/components/ui/Button'
+import { InputLabel } from '@/core/components/ui/InputLabel'
 import { supabase } from '@/core/supabase'
 import { A } from '@solidjs/router'
 import { createSignal } from 'solid-js'
@@ -39,7 +40,7 @@ export const RegisterPage = () => {
       return
     }
 
-    console.log(data);
+    console.log(data)
   }
 
   return (
@@ -52,54 +53,45 @@ export const RegisterPage = () => {
           </p>
         </header>
         <form class="flex flex-col gap-6 w-full" onSubmit={handleSubmitForm}>
-          <label class="space-y-2">
-            <p class="text-sm">Email Adress</p>
-            <input
-              class="text-sm rounded border border-primary-800 px-3 py-2 font-light w-full"
-              type="email"
-              autocomplete="email"
-              placeholder="email@example.com"
-              value={registerData().email}
-              onChange={(e) => {
-                setRegisterData((prev) => ({
-                  ...prev,
-                  email: e.target.value
-                }))
-              }}
-            />
-          </label>
+          <InputLabel
+            text="Email Adress"
+            type="email"
+            autocomplete="email"
+            placeholder="email@example.com"
+            value={registerData().email}
+            onChange={(e) => {
+              setRegisterData((prev) => ({
+                ...prev,
+                email: e.target.value
+              }))
+            }}
+          />
 
-          <label class="space-y-2">
-            <p class="text-sm">Password</p>
-            <input
-              class="text-sm rounded border border-primary-800 px-3 py-2 font-light w-full"
-              type="password"
-              placeholder="Password"
-              value={registerData().password}
-              onChange={(e) => {
-                setRegisterData((prev) => ({
-                  ...prev,
-                  password: e.target.value
-                }))
-              }}
-            />
-          </label>
+          <InputLabel
+            text="Password"
+            type="password"
+            placeholder="Password"
+            value={registerData().password}
+            onChange={(e) => {
+              setRegisterData((prev) => ({
+                ...prev,
+                password: e.target.value
+              }))
+            }}
+          />
 
-          <label class="space-y-2">
-            <p class="text-sm">Confirm Password</p>
-            <input
-              class="text-sm rounded border border-primary-800 px-3 py-2 font-light w-full"
-              type="password"
-              placeholder="Confirm password"
-              value={registerData().passwordConfirmation}
-              onChange={(e) => {
-                setRegisterData((prev) => ({
-                  ...prev,
-                  passwordConfirmation: e.target.value
-                }))
-              }}
-            />
-          </label>
+          <InputLabel
+            text="Confirm Password"
+            type="password"
+            placeholder="Confirm password"
+            value={registerData().passwordConfirmation}
+            onChange={(e) => {
+              setRegisterData((prev) => ({
+                ...prev,
+                passwordConfirmation: e.target.value
+              }))
+            }}
+          />
 
           <div class="mt-6 flex flex-col">
             <Button>Create account</Button>
