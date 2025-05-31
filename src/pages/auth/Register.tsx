@@ -1,7 +1,7 @@
+import { Anchor } from '@/core/components/ui/Anchor'
 import { Button } from '@/core/components/ui/Button'
 import { InputLabel } from '@/core/components/ui/InputLabel'
 import { supabase } from '@/core/supabase'
-import { A } from '@solidjs/router'
 import { createSignal } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -98,13 +98,7 @@ export const RegisterPage = () => {
           </div>
         </form>
         <p class="text-center text-sm text-zinc-400 mt-6">
-          Already have an account?{' '}
-          <A
-            class="underline decoration-primary-500 hover:decoration-primary-300 text-primary-200"
-            href="/login"
-          >
-            Log in
-          </A>
+          Already have an account? <Anchor href="/login">Log in</Anchor>
         </p>
       </div>
     </main>

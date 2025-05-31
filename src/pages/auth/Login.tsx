@@ -1,5 +1,6 @@
+import { Anchor } from '@/core/components/ui/Anchor'
 import { Button } from '@/core/components/ui/Button'
-import { A } from '@solidjs/router'
+import { InputLabel } from '@/core/components/ui/InputLabel'
 
 export const LoginPage = () => {
   return (
@@ -19,36 +20,20 @@ export const LoginPage = () => {
             e.preventDefault()
           }}
         >
-          <label class="space-y-2">
-            <p class="text-sm">Email Adress</p>
-            <input
-              class="text-sm rounded border border-primary-800 px-3 py-2 font-light w-full"
-              type="text"
-              placeholder="email@example.com"
-            />
-          </label>
+          <InputLabel
+            text="Email Adress"
+            type="text"
+            placeholder="email@example.com"
+          />
 
-          <label class="space-y-2">
-            <p class="text-sm">Password</p>
-            <input
-              class="text-sm rounded border border-primary-800 px-3 py-2 font-light w-full"
-              type="password"
-              placeholder="Password"
-            />
-          </label>
+          <InputLabel text="Password" type="password" placeholder="Password" />
 
           <div class="mt-6 flex flex-col">
             <Button>Log in</Button>
           </div>
         </form>
         <p class="text-center text-sm text-zinc-400 mt-6">
-          Don't have an account?{' '}
-          <A
-            class="underline decoration-primary-500 hover:decoration-primary-300 text-primary-200"
-            href="/register"
-          >
-            Sign up
-          </A>
+          Don't have an account? <Anchor href="/register">Sign up</Anchor>
         </p>
       </div>
     </main>
