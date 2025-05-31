@@ -119,7 +119,7 @@ export const RegisterPage = () => {
           </Show>
 
           <div class="mt-6 flex flex-col">
-            <Button>Create account</Button>
+            <Button type='submit'>Create account</Button>
           </div>
         </form>
         <p class="text-center text-sm text-zinc-400 mt-6">
