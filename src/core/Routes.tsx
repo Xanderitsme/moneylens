@@ -1,7 +1,8 @@
 import { MainLayout } from '@/layouts/MainLayout'
 import { Route, Router } from '@solidjs/router'
 import { DashboardPage } from '@/pages/Dashboard'
-import { LoginPage } from '@/pages/Login'
+import { LoginPage } from '@/pages/auth/Login'
+import { RegisterPage } from '@/pages/auth/Register'
 import { DashboardLayout } from '@/layouts/DashboardLayout'
 
 export const Routes = () => (
@@ -10,5 +11,6 @@ export const Routes = () => (
       <Route path="/" component={DashboardPage} />
     </Route>
     <Route path="/login" component={LoginPage} />
+    <Route path="/register" component={RegisterPage} />
   </Router>
 )
