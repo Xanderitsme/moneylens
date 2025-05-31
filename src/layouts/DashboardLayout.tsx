@@ -1,5 +1,5 @@
 // import { Header } from '@/core/components/Header'
-import { Sidebar } from '@/core/components/Sidebar'
+import { Sidebar } from '@/core/components/sections/Sidebar'
 import type { ParentComponent } from 'solid-js'
 
 export const DashboardLayout: ParentComponent = (props) => {
