@@ -3,7 +3,7 @@ import { A } from '@solidjs/router'
 
 export const LoginPage = () => {
   return (
-    <main class="flex justify-center items-center h-full bg-primary-950">
+    <main class="flex justify-center items-center h-full">
       <div class="max-w-96 w-full flex flex-col items-center">
         <header class="py-6 space-y-2">
           <h1 class="text-xl font-medium text-center">
