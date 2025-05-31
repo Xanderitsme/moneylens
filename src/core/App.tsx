@@ -1,6 +1,6 @@
 function App() {
   return (
-    <div class="flex justify-center items-center h-dvh bg-linear-to-br from-gray-900 to-gray-950">
+    <main class="grow flex justify-center items-center">
       <button
         class="px-4 py-3 bg-white/5 rounded border border-transparent text-zinc-400
           hover:bg-white/10 hover:border-white/50 hover:text-zinc-300
@@ -9,7 +9,7 @@ function App() {
       >
         Do <span class="font-bold">NOT</span> click me
       </button>
-    </div>
+    </main>
   )
 }
 

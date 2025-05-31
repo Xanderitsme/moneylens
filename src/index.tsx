@@ -1,8 +1,8 @@
 /* @refresh reload */
 import { render } from 'solid-js/web'
-import App from '@/core/App'
-import '@/ui/index.css'
+import '@/core/ui/index.css'
+import { Routes } from '@/core/Routes'
 
 const root = document.getElementById('root')
 
-render(() => <App />, root!)
+render(Routes, root!)
