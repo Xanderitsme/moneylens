@@ -1,8 +1,9 @@
 import { Anchor } from '@/core/components/ui/Anchor'
 import { Button } from '@/core/components/ui/Button'
 import { InputLabel } from '@/core/components/ui/InputLabel'
-import { supabase } from '@/core/supabase'
-import { createSignal } from 'solid-js'
+import { useAuthContext } from '@/core/context/auth/auth.provider'
+import { useNavigate } from '@solidjs/router'
+import { createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
 interface RegisterForm {
@@ -17,6 +18,10 @@ export const RegisterPage = () => {
     password: '',
     passwordConfirmation: ''
   })
+  const [error, setError] = createSignal('')
+
+  const { signUpNewUser } = useAuthContext()
+  const navigate = useNavigate()
 
   const handleSubmitForm = async (
     e: SubmitEvent & {
@@ -26,21 +31,31 @@ export const RegisterPage = () => {
   ) => {
     e.preventDefault()
 
+    if (registerData().email == '' || registerData().password == '') {
+      setError('Please enter your email and password to create your account')
+      return
+    }
+
     if (registerData().password !== registerData().passwordConfirmation) {
+      setError("Passwords don't match")
       return
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: registerData().email,
-      password: registerData().password
-    })
+    try {
+      const { error } = await signUpNewUser(
+        registerData().email,
+        registerData().password
+      )
 
-    if (error != null) {
-      console.log(error)
-      return
+      if (error != null) {
+        setError(error.message)
+        return
+      }
+
+      navigate('/dashboard', { replace: true })
+    } catch {
+      setError('Something went wrong')
     }
-
-    console.log(data)
   }
 
   return (
@@ -58,8 +73,10 @@ export const RegisterPage = () => {
             type="email"
             autocomplete="email"
             placeholder="email@example.com"
+            required
             value={registerData().email}
             onChange={(e) => {
+              setError('')
               setRegisterData((prev) => ({
                 ...prev,
                 email: e.target.value
@@ -71,8 +88,10 @@ export const RegisterPage = () => {
             text="Password"
             type="password"
             placeholder="Password"
+            required
             value={registerData().password}
             onChange={(e) => {
+              setError('')
               setRegisterData((prev) => ({
                 ...prev,
                 password: e.target.value
@@ -84,14 +103,20 @@ export const RegisterPage = () => {
             text="Confirm Password"
             type="password"
             placeholder="Confirm password"
+            required
             value={registerData().passwordConfirmation}
             onChange={(e) => {
+              setError('')
               setRegisterData((prev) => ({
                 ...prev,
                 passwordConfirmation: e.target.value
               }))
             }}
           />
+
+          <Show when={error().length > 0}>
+            <p class="text-red-400 text-sm">{error()}</p>
+          </Show>
 
           <div class="mt-6 flex flex-col">
             <Button>Create account</Button>
