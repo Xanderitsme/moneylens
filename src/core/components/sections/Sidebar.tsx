@@ -7,7 +7,7 @@ import { ChevronsUpDownIcon } from '../icons/ChevronsUpDownIcon'
 const SidebarLink = ({ children, class: className, ...props }: AnchorProps) => (
   <A
     class={cn(
-      'text-sm px-2 py-1.5 rounded-lg w-full inline-block',
+      'text-sm p-2 rounded-lg w-full inline-block',
       'hover:bg-primary-200/10 outline-none focus-visible:ring-2 ring-primary-200/30',
       className
     )}
@@ -22,8 +22,8 @@ export const Sidebar = () => {
   const { session } = useAuthContext()
 
   return (
-    <aside class="w-64 h-full shrink-0 flex flex-col gap-2">
-      <header class="p-4">
+    <aside class="w-64 h-full shrink-0 flex flex-col">
+      <header class="p-2">
         <SidebarLink href="/dashboard" class="block p-0" activeClass="">
           <div class="flex flex-wrap items-center gap-3 p-2 hover:bg-primary-200/10 rounded-lg">
             <div class="p-1 bg-primary-50 rounded-lg">
@@ -33,9 +33,11 @@ export const Sidebar = () => {
           </div>
         </SidebarLink>
       </header>
-      <nav class="grow p-4 space-y-2">
-        <div class="space-y-2">
-          <div class="text-xs text-zinc-400 font-semibold">Platform</div>
+      <nav class="grow px-2 space-y-2">
+        <div>
+          <div class="text-xs text-zinc-400 font-semibold px-2 align-middle py-2">
+            Platform
+          </div>
           <ul class="gap-1 flex flex-col">
             <li>
               <SidebarLink href="/dashboard">Dashboard</SidebarLink>
