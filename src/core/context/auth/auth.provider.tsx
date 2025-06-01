@@ -1,4 +1,4 @@
-import { createEffect, createSignal, useContext } from 'solid-js'
+import { createSignal, onMount, useContext } from 'solid-js'
 import {
   AuthContext,
   type AuthContextType
@@ -13,12 +13,15 @@ interface Props {
 
 export const AuthContextProvider = (props: Props) => {
   const [session, setSession] = createSignal<Session | null>(null)
+  const [isLoading, setIsLoading] = createSignal<boolean>(true)
 
   const signUpNewUser = async (email: string, password: string) => {
+    setIsLoading(true)
     const { data, error } = await supabase.auth.signUp({
       email,
       password
     })
+    setIsLoading(false)
 
     if (error != null) {
       console.error(error)
@@ -29,6 +32,7 @@ export const AuthContextProvider = (props: Props) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      setIsLoading(true)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -42,11 +46,25 @@ export const AuthContextProvider = (props: Props) => {
       return { data, error: null }
     } catch (error) {
       return { data: null, error: 'Something went wrong' }
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  createEffect(async () => {
+  const signOut = async () => {
+    setIsLoading(true)
+    const { error } = await supabase.auth.signOut()
+    setIsLoading(false)
+
+    if (error != null) {
+      console.error(error)
+    }
+  }
+
+  onMount(async () => {
+    setIsLoading(true)
     const { data, error } = await supabase.auth.getSession()
+    setIsLoading(false)
 
     if (error == null) {
       setSession(data.session)
@@ -57,18 +75,11 @@ export const AuthContextProvider = (props: Props) => {
     })
   })
 
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-
-    if (error != null) {
-      console.error(error)
-    }
-  }
-
   return (
     <AuthContext.Provider
       value={{
         session,
+        isLoading,
         signUpNewUser,
         signIn,
         signOut

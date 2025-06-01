@@ -8,6 +8,7 @@ import { createContext, type Accessor } from 'solid-js'
 
 export interface AuthContextType {
   session: Accessor<Session | null>
+  isLoading: Accessor<Boolean>
   signUpNewUser: (
     email: string,
     password: string
