@@ -3,11 +3,12 @@ import { A, type AnchorProps } from '@solidjs/router'
 import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { cn } from '@/core/lib/utils'
 import { ChevronsUpDownIcon } from '../icons/ChevronsUpDownIcon'
+import { LayoutDashboardIcon } from '../icons/LayoutDashboardIcon'
 
 const SidebarLink = ({ children, class: className, ...props }: AnchorProps) => (
   <A
     class={cn(
-      'text-sm p-2 rounded-lg w-full inline-block',
+      'text-sm p-2 rounded-lg w-full flex items-center gap-2',
       'hover:bg-primary-200/10 outline-none focus-visible:ring-2 ring-primary-200/30',
       className
     )}
@@ -25,7 +26,7 @@ export const Sidebar = () => {
     <aside class="w-64 h-full shrink-0 flex flex-col">
       <header class="p-2">
         <SidebarLink href="/dashboard" class="block p-0" activeClass="">
-          <div class="flex flex-wrap items-center gap-3 p-2 hover:bg-primary-200/10 rounded-lg">
+          <div class="flex flex-wrap items-center gap-3 p-2 rounded-lg">
             <div class="p-1 bg-primary-50 rounded-lg">
               <CoinsIcon class="w-5 h-5 shrink-0 text-black" />
             </div>
@@ -40,12 +41,15 @@ export const Sidebar = () => {
           </div>
           <ul class="gap-1 flex flex-col">
             <li>
-              <SidebarLink href="/dashboard">Dashboard</SidebarLink>
+              <SidebarLink href="/dashboard">
+                <LayoutDashboardIcon class="size-4 text-primary-50" />
+                <span>Dashboard</span>
+              </SidebarLink>
             </li>
           </ul>
         </div>
       </nav>
-      <footer class="p-4">
+      <footer class="p-2">
         <button class="text-sm p-2 rounded-lg w-full flex items-center gap-2 hover:bg-primary-200/10 outline-none focus-visible:ring-2 ring-primary-200/30">
           <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center">
             A
@@ -55,7 +59,7 @@ export const Sidebar = () => {
               {session()?.user.email}
             </span>
           </div>
-          <ChevronsUpDownIcon class="size-4" />
+          <ChevronsUpDownIcon class="size-5" />
         </button>
       </footer>
     </aside>
