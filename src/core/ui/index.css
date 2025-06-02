@@ -32,3 +32,7 @@
   --color-primary-950: #022f2e;
   --color-input: #3f3f46;
 }
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+}
