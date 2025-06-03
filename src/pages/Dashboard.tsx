@@ -1,12 +1,11 @@
 import { PanelLeftIcon } from '@/core/components/icons/PanelLeftIcon'
 import { IconButton } from '@/core/components/ui/Button'
-// import { Chart } from '@/dashboard/components/Chart'
 import { Chart2 } from '@/dashboard/components/Chart2'
 
 export const DashboardPage = () => {
   return (
-    <main class="h-full flex flex-col">
-      <header class="px-2.5 py-4 border-b border-primary-900/20">
+    <>
+      <header class="px-2 py-2.5 sm:px-2.5 sm:py-4 border-b border-primary-900/20">
         <div class="flex gap-1 items-center">
           <IconButton>
             <PanelLeftIcon class="size-4 text-primary-50 shrink-0" />
@@ -14,10 +13,11 @@ export const DashboardPage = () => {
           <span class="text-sm">Dashboard</span>
         </div>
       </header>
-      <div class="p-4 h-full overflow-auto scrollbar-thin">
-        {/* <Chart /> */}
-        <Chart2 />
-      </div>
-    </main>
+      <main class="h-full flex flex-col">
+        <div class="p-2 sm:p-4 h-full overflow-auto scrollbar-thin">
+          <Chart2 />
+        </div>
+      </main>
+    </>
   )
 }
