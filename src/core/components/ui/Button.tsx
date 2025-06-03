@@ -12,7 +12,7 @@ export const Button = ({
 }) => (
   <button
     class={cn(
-      'px-3 py-2 bg-white text-primary-950 text-sm rounded font-medium',
+      'px-3 py-2 bg-white text-primary-950 text-sm rounded font-medium cursor-pointer',
       'hover:bg-primary-50 active:bg-primary-50',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
       'disabled:opacity-50 disabled:cursor-not-allowed',
@@ -36,7 +36,7 @@ export const IconButton = ({
 }) => (
   <button
     class={cn(
-      'rounded-md p-1.5 hover:bg-primary-200/15 outline-none',
+      'rounded-md p-1.5 hover:bg-primary-200/15 outline-none cursor-pointer',
       'focus-visible:ring-2 ring-primary-200/30',
       'disabled:opacity-50 disabled:cursor-not-allowed',
       'transition-colors duration-150',
