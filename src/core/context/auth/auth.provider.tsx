@@ -5,7 +5,9 @@ import {
 } from '@/core/context/auth/auth.context'
 import type { JSX } from 'solid-js/jsx-runtime'
 import type { Session } from '@supabase/supabase-js'
-import { supabase } from '@/core/supabase'
+import { supabase } from '@/core/services/supabase'
+import type { SignInType, SignOutType, SignUpType } from '@/types/auth'
+import * as authController from '@/core/controllers/auth.controller'
 
 interface Props {
   children?: JSX.Element
@@ -13,60 +15,41 @@ interface Props {
 
 export const AuthContextProvider = (props: Props) => {
   const [session, setSession] = createSignal<Session | null>(null)
-  const [isLoading, setIsLoading] = createSignal<boolean>(true)
+  const [isLoading, setIsLoading] = createSignal<boolean>(false)
+  const [errorMessage, setErrorMessage] = createSignal<string | undefined>()
 
-  const signUpNewUser = async (email: string, password: string) => {
+  const signUpNewUser: SignUpType = async ({ email, password }) => {
     setIsLoading(true)
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    })
+    const result = await authController.signUp({ email, password })
     setIsLoading(false)
 
-    if (error != null) {
-      console.error(error)
-    }
-
-    return { data, error }
+    return result
   }
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      setIsLoading(true)
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
-
-      if (error != null) {
-        console.error(error)
-        return { data: null, error: error.message }
-      }
-
-      return { data, error: null }
-    } catch (error) {
-      return { data: null, error: 'Something went wrong' }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const signOut = async () => {
+  const signIn: SignInType = async ({ email, password }) => {
     setIsLoading(true)
-    const { error } = await supabase.auth.signOut()
+    const result = await authController.signIn({ email, password })
     setIsLoading(false)
 
-    if (error != null) {
-      console.error(error)
-    }
+    return result
+  }
+
+  const signOut: SignOutType = async () => {
+    setIsLoading(true)
+    const result = await authController.signOut()
+    setIsLoading(false)
+
+    return result
   }
 
   onMount(async () => {
     setIsLoading(true)
-    const { data, error } = await supabase.auth.getSession()
+    const { data, error } = await authController.getSession()
     setIsLoading(false)
 
-    if (error == null) {
+    if (error != null) {
+      setErrorMessage(error.message)
+    } else {
       setSession(data.session)
     }
 
@@ -80,6 +63,7 @@ export const AuthContextProvider = (props: Props) => {
       value={{
         session,
         isLoading,
+        errorMessage,
         signUpNewUser,
         signIn,
         signOut
