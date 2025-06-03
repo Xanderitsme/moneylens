@@ -15,3 +15,7 @@ type MaybePromise<T> = T | Promise<T>
 type Method<A, T, E> = (args: A) => Promise<Result<T, E>>
 
 type MethodError<A, E> = (args: A) => Promise<undefined | Failure<E>>
+
+type MethodWithoutArgs<T, E> = () => Promise<Result<T, E>>
+
+type MethodErrorWithoutArgs<E> = () => Promise<undefined | Failure<E>>

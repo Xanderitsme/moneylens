@@ -29,15 +29,11 @@ export type SignInType = Method<
   }
 >
 
-export type SignOutType = MethodError<
-  never,
-  {
-    message: string
-  }
->
+export type SignOutType = MethodErrorWithoutArgs<{
+  message: string
+}>
 
-export type GetSessionType = Method<
-  never,
+export type GetSessionType = MethodWithoutArgs<
   {
     session: Session
   },
