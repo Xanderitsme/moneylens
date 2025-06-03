@@ -4,9 +4,12 @@ import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { cn } from '@/core/lib/utils'
 import { ChevronsUpDownIcon } from '@/core/components/icons/ChevronsUpDownIcon'
 import { LayoutDashboardIcon } from '@/core/components/icons/LayoutDashboardIcon'
+import { For, Show, type JSX } from 'solid-js'
+
+type AriaCurrentType = 'page' | 'location' | 'step' | boolean
 
 interface SidebarLinkProps extends AnchorProps {
-  'aria-current'?: 'page' | 'location' | 'step' | boolean
+  'aria-current'?: AriaCurrentType
 }
 
 const SidebarLink = ({
@@ -29,6 +32,33 @@ const SidebarLink = ({
   </A>
 )
 
+interface SidebarLinkType {
+  href: string
+  text: string
+  icon?: (props: JSX.SVGElementTags['svg']) => JSX.Element
+}
+
+const links: SidebarLinkType[] = [
+  {
+    href: '/dashboard',
+    text: 'Dashboard',
+    icon: LayoutDashboardIcon
+  },
+  {
+    href: '/wallets',
+    text: 'Wallets'
+  },
+  {
+    href: '/categories',
+    text: 'Categories'
+  },
+
+  {
+    href: '/transactions',
+    text: 'Transactions'
+  }
+]
+
 export const Sidebar = () => {
   const { session } = useAuthContext()
 
@@ -50,12 +80,21 @@ export const Sidebar = () => {
             Platform
           </div>
           <ul class="gap-1 flex flex-col">
-            <li>
-              <SidebarLink href="/dashboard">
-                <LayoutDashboardIcon class="size-4" />
-                <span>Dashboard</span>
-              </SidebarLink>
-            </li>
+            <For each={links}>
+              {(Item) => (
+                <li>
+                  <SidebarLink href={Item.href} aria-current="page">
+                    <Show when={Item.icon}>
+                      {(icon) => {
+                        const ItemIcon = icon()
+                        return <ItemIcon class="size-4" />
+                      }}
+                    </Show>
+                    <span>{Item.text}</span>
+                  </SidebarLink>
+                </li>
+              )}
+            </For>
           </ul>
         </div>
       </nav>
