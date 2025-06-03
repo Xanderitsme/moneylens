@@ -1,22 +1,24 @@
-import { PanelLeftIcon } from '@/core/components/icons/PanelLeftIcon'
-import { IconButton } from '@/core/components/ui/Button'
+import { Header } from '@/core/components/sections/Header'
+import { Button } from '@/core/components/ui/Button'
+import { signOut } from '@/core/controllers/auth.controller'
 import { Chart2 } from '@/dashboard/components/Chart2'
 
 export const DashboardPage = () => {
   return (
     <>
-      <header class="px-2 py-2.5 sm:px-2.5 sm:py-4 border-b border-primary-900/20">
-        <div class="flex gap-1 items-center">
-          <IconButton aria-label="toggle sidebar">
-            <PanelLeftIcon class="size-4 text-primary-50 shrink-0" />
-          </IconButton>
-          <span class="text-sm">Dashboard</span>
-        </div>
-      </header>
+      <Header title="Dashboard" />
       <main class="h-full flex flex-col">
         <div class="p-2 sm:p-4 overflow-auto scrollbar-thin">
           <Chart2 />
         </div>
+        <Button
+          class="w-fit"
+          onClick={() => {
+            signOut()
+          }}
+        >
+          Sign Out
+        </Button>
       </main>
     </>
   )
