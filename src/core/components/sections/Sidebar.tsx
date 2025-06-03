@@ -2,17 +2,27 @@ import { CoinsIcon } from '@/core/components/icons/CoinsIcon'
 import { A, type AnchorProps } from '@solidjs/router'
 import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { cn } from '@/core/lib/utils'
-import { ChevronsUpDownIcon } from '../icons/ChevronsUpDownIcon'
-import { LayoutDashboardIcon } from '../icons/LayoutDashboardIcon'
+import { ChevronsUpDownIcon } from '@/core/components/icons/ChevronsUpDownIcon'
+import { LayoutDashboardIcon } from '@/core/components/icons/LayoutDashboardIcon'
 
-const SidebarLink = ({ children, class: className, ...props }: AnchorProps) => (
+interface SidebarLinkProps extends AnchorProps {
+  'aria-current'?: 'page' | 'location' | 'step' | boolean
+}
+
+const SidebarLink = ({
+  children,
+  class: className,
+  'aria-current': ariaCurrent,
+  ...props
+}: SidebarLinkProps) => (
   <A
     class={cn(
       'text-sm p-2 rounded-lg w-full flex items-center gap-2',
       'hover:bg-primary-200/10 outline-none focus-visible:ring-2 ring-primary-200/30',
       className
     )}
-    activeClass="bg-primary-200/10"
+    activeClass="bg-primary-200/10 font-medium"
+    aria-current={ariaCurrent}
     {...props}
   >
     {children}
@@ -42,7 +52,7 @@ export const Sidebar = () => {
           <ul class="gap-1 flex flex-col">
             <li>
               <SidebarLink href="/dashboard">
-                <LayoutDashboardIcon class="size-4 text-primary-50" />
+                <LayoutDashboardIcon class="size-4" />
                 <span>Dashboard</span>
               </SidebarLink>
             </li>
