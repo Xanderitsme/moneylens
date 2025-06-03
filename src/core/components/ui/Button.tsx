@@ -3,13 +3,24 @@ import type { JSX } from 'solid-js/jsx-runtime'
 
 export const Button = ({
   class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
   ...props
-}: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => (
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label'?: string
+  'aria-describedby'?: string
+}) => (
   <button
     class={cn(
-      'px-3 py-2 bg-white text-primary-950 hover:bg-primary-50 text-sm rounded font-medium',
+      'px-3 py-2 bg-white text-primary-950 text-sm rounded font-medium',
+      'hover:bg-primary-50 active:bg-primary-50',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      'transition-colors duration-200',
       className
     )}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
     {...props}
   >
     {props.children}
@@ -18,13 +29,20 @@ export const Button = ({
 
 export const IconButton = ({
   class: className,
+  'aria-label': ariaLabel,
   ...props
-}: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => (
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label': string
+}) => (
   <button
     class={cn(
-      'rounded-md p-1.5 hover:bg-primary-200/15 outline-none focus-visible:ring-2 ring-primary-200/30',
+      'rounded-md p-1.5 hover:bg-primary-200/15 outline-none',
+      'focus-visible:ring-2 ring-primary-200/30',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      'transition-colors duration-150',
       className
     )}
+    aria-label={ariaLabel}
     {...props}
   >
     {props.children}
