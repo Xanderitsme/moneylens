@@ -1,3 +1,4 @@
+import { LoaderCircleIcon } from '@/core/components/icons/LoaderCircleIcon'
 import { Anchor } from '@/core/components/ui/Anchor'
 import { Button } from '@/core/components/ui/Button'
 import { InputLabel } from '@/core/components/ui/InputLabel'
@@ -18,7 +19,7 @@ export const LoginPage = () => {
   })
   const [error, setError] = createSignal('')
 
-  const { signIn } = useAuthContext()
+  const { signIn, isLoading } = useAuthContext()
   const navigate = useNavigate()
 
   const handleSubmitForm = async (
@@ -34,21 +35,17 @@ export const LoginPage = () => {
       return
     }
 
-    try {
-      const { error } = await signIn(
-        registerData().email,
-        registerData().password
-      )
+    const { error } = await signIn({
+      email: registerData().email,
+      password: registerData().password
+    })
 
-      if (error != null) {
-        setError(error)
-        return
-      }
-
-      navigate('/dashboard', { replace: true })
-    } catch {
-      setError('Something went wrong')
+    if (error != null) {
+      setError(error.message)
+      return
     }
+
+    navigate('/dashboard', { replace: true })
   }
 
   return (
@@ -99,7 +96,16 @@ export const LoginPage = () => {
           </Show>
 
           <div class="mt-6 flex flex-col">
-            <Button type="submit">Log in</Button>
+            <Button
+              type="submit"
+              disabled={isLoading()}
+              class="flex justify-center gap-2 items-center"
+            >
+              Log in
+              <Show when={isLoading()}>
+                <LoaderCircleIcon class="animate-spin shrink-0 h-6 w-6 text-primary-500" />
+              </Show>
+            </Button>
           </div>
         </form>
         <p class="text-center text-sm text-zinc-400 mt-6">
