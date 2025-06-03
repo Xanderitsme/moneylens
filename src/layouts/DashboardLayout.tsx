@@ -5,8 +5,8 @@ export const DashboardLayout: ParentComponent = (props) => {
   return (
     <div class="flex h-dvh w-dvw bg-linear-to-br from-primary-950/10 to-primary-950/5 overflow-hidden">
       <Sidebar />
-      <div class="h-full grow p-2 pl-0 overflow-auto">
-        <div class="rounded-2xl overflow-hidden bg-zinc-950 h-full">
+      <div class="h-full grow sm:p-2 pl-0 overflow-auto">
+        <div class="sm:rounded-2xl overflow-hidden bg-zinc-950 h-full">
           <div class="bg-primary-950/10 h-full">{props.children}</div>
         </div>
       </div>
