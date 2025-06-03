@@ -1,6 +1,7 @@
 import { PanelLeftIcon } from '@/core/components/icons/PanelLeftIcon'
 import { IconButton } from '@/core/components/ui/Button'
-import { Chart } from '@/dashboard/components/Chart'
+// import { Chart } from '@/dashboard/components/Chart'
+import { Chart2 } from '@/dashboard/components/Chart2'
 
 export const DashboardPage = () => {
   return (
@@ -14,7 +15,8 @@ export const DashboardPage = () => {
         </div>
       </header>
       <div class="p-4 h-full overflow-auto scrollbar-thin">
-        <Chart />
+        {/* <Chart /> */}
+        <Chart2 />
       </div>
     </main>
   )

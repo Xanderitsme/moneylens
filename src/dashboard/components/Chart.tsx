@@ -24,89 +24,91 @@ export const Chart = () => {
   let containerRef!: HTMLDivElement
   let chart: echarts.ECharts | null
 
-  onMount(() => {
-    const dataCount = 30
-    const maxIncome = 290
-    const maxOutcome = 250
-    const maxYAxis = maxIncome + 10
-    const yAxisInterval = 50
+  const dataCount = 30
+  const maxIncome = 290
+  const maxOutcome = 250
+  const maxYAxis = maxIncome + 10
+  const yAxisInterval = 50
 
-    const option = {
-      tooltip: {
-        trigger: 'axis',
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        crossStyle: {
+          color: '#999'
+        }
+      }
+    },
+    toolbox: {
+      feature: {
+        magicType: { show: true, type: ['line', 'bar'] },
+        restore: { show: true }
+      }
+    },
+    legend: {
+      data: ['Income', 'Outcome']
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: getDates(new Date(), dataCount),
         axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999'
+          type: 'shadow'
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        name: 'Amount',
+        min: 0,
+        max: maxYAxis,
+        interval: yAxisInterval,
+        axisLabel: {
+          formatter: 'S/. {value}'
+        }
+      }
+    ],
+    series: [
+      {
+        name: 'Income',
+        type: 'bar',
+        tooltip: {
+          valueFormatter: function (value: any) {
+            return 'S/. ' + value
           }
-        }
-      },
-      toolbox: {
-        feature: {
-          magicType: { show: true, type: ['line', 'bar'] },
-          restore: { show: true }
-        }
-      },
-      legend: {
-        data: ['Income', 'Outcome']
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: getDates(new Date(), dataCount),
-          axisPointer: {
-            type: 'shadow'
-          }
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value',
-          name: 'Amount',
-          min: 0,
-          max: maxYAxis,
-          interval: yAxisInterval,
-          axisLabel: {
-            formatter: 'S/. {value}'
-          }
-        }
-      ],
-      series: [
-        {
-          name: 'Income',
-          type: 'bar',
-          tooltip: {
-            valueFormatter: function (value: any) {
-              return 'S/. ' + value
-            }
-          },
-          data: generateRandomData(0, maxIncome, dataCount),
-          color: '#00bba7'
         },
-        {
-          name: 'Outcome',
-          type: 'bar',
-          tooltip: {
-            valueFormatter: function (value: any) {
-              return 'S/. ' + value
-            }
-          },
-          data: generateRandomData(0, maxOutcome, dataCount),
-          color: '#bb0000'
-        }
-      ]
-    }
+        data: generateRandomData(0, maxIncome, dataCount),
+        color: '#5ebfbf'
+      },
+      {
+        name: 'Outcome',
+        type: 'bar',
+        tooltip: {
+          valueFormatter: function (value: any) {
+            return 'S/. ' + value
+          }
+        },
+        data: generateRandomData(0, maxOutcome, dataCount),
+        color: '#f66986'
+      }
+    ]
+  }
 
-    setTimeout(() => {
+  onMount(() => {
+    queueMicrotask(() => {
+      // setTimeout(() => {
       chart = echarts.init(containerRef, '', { renderer: 'svg' })
 
       chart.setOption(option)
-    }, 50)
+      // }, 50)
+    })
   })
 
   onCleanup(() => {
     chart?.dispose()
   })
 
-  return <div ref={containerRef} class="h-[500px] w-[1400px]"></div>
+  return <div ref={containerRef} class="h-[400px] w-[1200px]"></div>
 }
