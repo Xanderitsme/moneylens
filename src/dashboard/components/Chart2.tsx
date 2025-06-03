@@ -31,41 +31,41 @@ export const Chart2 = () => {
     const maxOutcome = 250
 
     chart = new ChartJS(canvas, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: getDates(new Date(), dataCount),
         datasets: [
           {
             label: 'Income',
             data: generateRandomData(0, maxIncome, dataCount),
-            tension: 0.3,
+            // tension: 0.3,
             borderColor: '#5ebfbf',
             pointStyle: 'circle',
-            pointRadius: 0,
-            pointHoverRadius: 6,
+            // pointRadius: 0,
+            // pointHoverRadius: 6,
             backgroundColor: '#5ebfbf'
           },
           {
             label: 'Outcome',
             data: generateRandomData(0, maxOutcome, dataCount),
-            tension: 0.3,
+            // tension: 0.3,
             borderColor: '#f66986',
             pointStyle: 'circle',
-            pointRadius: 0,
-            pointHoverRadius: 6,
+            // pointRadius: 0,
+            // pointHoverRadius: 6,
             backgroundColor: '#f66986'
           }
         ]
       },
       options: {
         responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Incomes vs Outcomes (Last 30 days)',
-            color: '#ffffff'
-          }
-        },
+        // plugins: {
+        //   title: {
+        //     display: true,
+        //     text: 'Incomes vs Outcomes (Last 30 days)',
+        //     color: '#ffffff'
+        //   }
+        // },
         interaction: {
           intersect: false,
           mode: 'index'
@@ -85,9 +85,15 @@ export const Chart2 = () => {
   })
 
   return (
-    <canvas
-      ref={canvasRef}
-      class="min-h-64 min-w-32 max-h-[400px] max-w-[1200px]"
-    ></canvas>
+    <div class="flex justify-center">
+      <section class="w-full flex flex-col items-center max-w-5xl">
+        <h3>Incomes vs Outcomes (Last 30 days)</h3>
+        <div class="w-full flex overflow-x-auto overflow-y-hidden scrollbar-thin">
+          <div class="w-full min-w-80 aspect-video">
+            <canvas ref={canvasRef}></canvas>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
