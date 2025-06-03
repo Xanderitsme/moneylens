@@ -7,9 +7,9 @@ interface IntersectionObserverOptions {
   once?: boolean
 }
 
-interface UseIntersectionObserverReturn {
-  observe: (element: Element) => void
-  unobserve: (element: Element) => void
+interface UseIntersectionObserverReturn<T extends Element = Element> {
+  observe: (element: T) => void
+  unobserve: (element: T) => void
   disconnect: () => void
 }
 
@@ -19,10 +19,14 @@ interface UseIntersectionObserverReturn {
  * @param options - Opciones del Intersection Observer
  * @returns Objeto con métodos para controlar el observer
  */
-export function useIntersectionObserver(
-  callback: (isIntersecting: boolean, entry: IntersectionObserverEntry) => void,
+export function useIntersectionObserver<T extends Element = Element>(
+  callback: (
+    isIntersecting: boolean,
+    entry: IntersectionObserverEntry,
+    element: T
+  ) => void,
   options: IntersectionObserverOptions = {}
-): UseIntersectionObserverReturn {
+): UseIntersectionObserverReturn<T> {
   let observer: IntersectionObserver | null = null
 
   const {
@@ -36,7 +40,7 @@ export function useIntersectionObserver(
     observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          callback(entry.isIntersecting, entry)
+          callback(entry.isIntersecting, entry, entry.target as T)
 
           if (once && entry.isIntersecting) {
             observer?.unobserve(entry.target)
@@ -56,10 +60,10 @@ export function useIntersectionObserver(
   })
 
   return {
-    observe: (element: Element) => {
+    observe: (element: T) => {
       observer?.observe(element)
     },
-    unobserve: (element: Element) => {
+    unobserve: (element: T) => {
       observer?.unobserve(element)
     },
     disconnect: () => {
@@ -68,44 +72,32 @@ export function useIntersectionObserver(
   }
 }
 
-export function useVisibilityObserver(
-  callback: (element: Element) => void,
+export function useIntersectionRef<T extends Element = Element>(
+  callback: (
+    isIntersecting: boolean,
+    entry: IntersectionObserverEntry,
+    element: T
+  ) => void,
   options: IntersectionObserverOptions = {}
 ) {
-  const { observe } = useIntersectionObserver(
-    (isIntersecting, entry) => {
-      if (isIntersecting) {
-        callback(entry.target)
-      }
-    },
-    { once: true, ...options }
-  )
+  const { observe } = useIntersectionObserver<T>(callback, options)
 
-  return observe
-}
-
-export function useIntersectionRef(
-  callback: (isIntersecting: boolean, entry: IntersectionObserverEntry) => void,
-  options: IntersectionObserverOptions = {}
-) {
-  const { observe } = useIntersectionObserver(callback, options)
-
-  return (element: Element) => {
+  return (element: T) => {
     if (element) {
       observe(element)
     }
   }
 }
 
-export function useLazyInit(
-  initCallback: (element: Element) => void,
+export function useLazyInit<T extends Element = Element>(
+  initCallback: (element: T) => void,
   options: IntersectionObserverOptions = {}
 ) {
   let initialized = false
 
-  const observeElement = useVisibilityObserver(
-    (element) => {
-      if (!initialized) {
+  const { observe } = useIntersectionObserver<T>(
+    (isIntersecting, _, element) => {
+      if (isIntersecting && !initialized) {
         initialized = true
         initCallback(element)
       }
@@ -113,9 +105,14 @@ export function useLazyInit(
     {
       threshold: 0.1,
       rootMargin: '50px',
+      once: true,
       ...options
     }
   )
 
-  return observeElement
+  return (element: T) => {
+    if (element) {
+      observe(element)
+    }
+  }
 }
