@@ -1,3 +1,4 @@
+import { LoaderCircleIcon } from '@/core/components/icons/LoaderCircleIcon'
 import { Anchor } from '@/core/components/ui/Anchor'
 import { Button } from '@/core/components/ui/Button'
 import { InputLabel } from '@/core/components/ui/InputLabel'
@@ -20,7 +21,7 @@ export const RegisterPage = () => {
   })
   const [error, setError] = createSignal('')
 
-  const { signUpNewUser } = useAuthContext()
+  const { signUpNewUser, isLoading } = useAuthContext()
   const navigate = useNavigate()
 
   const handleSubmitForm = async (
@@ -41,21 +42,17 @@ export const RegisterPage = () => {
       return
     }
 
-    try {
-      const { error } = await signUpNewUser(
-        registerData().email,
-        registerData().password
-      )
+    const { error } = await signUpNewUser({
+      email: registerData().email,
+      password: registerData().password
+    })
 
-      if (error != null) {
-        setError(error.message)
-        return
-      }
-
-      navigate('/dashboard', { replace: true })
-    } catch {
-      setError('Something went wrong')
+    if (error != null) {
+      setError(error.message)
+      return
     }
+
+    navigate('/dashboard', { replace: true })
   }
 
   return (
@@ -119,7 +116,12 @@ export const RegisterPage = () => {
           </Show>
 
           <div class="mt-6 flex flex-col">
-            <Button type='submit'>Create account</Button>
+            <Button type="submit" disabled={isLoading()}>
+              <span>Create account</span>
+              <Show when={isLoading()}>
+                <LoaderCircleIcon class="animate-spin shrink-0 h-6 w-6 text-primary-500" />
+              </Show>
+            </Button>
           </div>
         </form>
         <p class="text-center text-sm text-zinc-400 mt-6">

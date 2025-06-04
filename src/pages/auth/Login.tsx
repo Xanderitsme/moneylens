@@ -96,12 +96,8 @@ export const LoginPage = () => {
           </Show>
 
           <div class="mt-6 flex flex-col">
-            <Button
-              type="submit"
-              disabled={isLoading()}
-              class="flex justify-center gap-2 items-center"
-            >
-              Log in
+            <Button type="submit" disabled={isLoading()}>
+              <span>Log in</span>
               <Show when={isLoading()}>
                 <LoaderCircleIcon class="animate-spin shrink-0 h-6 w-6 text-primary-500" />
               </Show>
