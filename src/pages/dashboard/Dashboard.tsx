@@ -3,7 +3,7 @@ import { Button } from '@/core/components/ui/Button'
 import { signOut } from '@/core/controllers/auth.controller'
 import { Chart } from '@/dashboard/components/Chart'
 
-export const DashboardPage = () => {
+const DashboardPage = () => {
   return (
     <>
       <Header title="Dashboard" />
@@ -25,3 +25,5 @@ export const DashboardPage = () => {
     </>
   )
 }
+
+export default DashboardPage

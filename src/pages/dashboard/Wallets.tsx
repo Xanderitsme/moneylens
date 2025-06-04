@@ -3,7 +3,7 @@ import { Header } from '@/core/components/sections/Header'
 import { Anchor } from '@/core/components/ui/Anchor'
 import { ButtonPrimary } from '@/core/components/ui/Button'
 
-export const WalletsPage = () => {
+const WalletsPage = () => {
   return (
     <>
       <Header title="Wallets" />
@@ -25,3 +25,5 @@ export const WalletsPage = () => {
     </>
   )
 }
+
+export default WalletsPage
