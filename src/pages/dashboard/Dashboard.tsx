@@ -7,7 +7,7 @@ const DashboardPage = () => {
   return (
     <>
       <Header title="Dashboard" />
-      <main class="h-full flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
+      <main class="grow flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
         <div class="flex justify-center">
           <Chart class="bg-zinc-900 p-4 rounded-lg" />
         </div>

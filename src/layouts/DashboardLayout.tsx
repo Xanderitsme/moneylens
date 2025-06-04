@@ -7,7 +7,7 @@ export const DashboardLayout: ParentComponent = (props) => {
       <Sidebar />
       <div class="h-full grow sm:p-2 pl-0 overflow-auto">
         <div class="sm:rounded-lg overflow-hidden bg-zinc-950 h-full">
-          <div class="bg-primary-950/10 h-full">{props.children}</div>
+          <div class="bg-primary-950/10 h-full flex flex-col">{props.children}</div>
         </div>
       </div>
     </div>
