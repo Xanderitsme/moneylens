@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const Header = ({ title }: Props) => (
-  <header class="px-2 py-2.5 sm:px-2.5 sm:py-4 border-b border-primary-900/20">
+  <header class="px-2 py-2.5 sm:px-2.5 sm:py-4 border-b border-primary-300/10">
     <div class="flex gap-1 items-center">
       <IconButton aria-label="toggle sidebar">
         <PanelLeftIcon class="size-4 text-primary-50 shrink-0" />
