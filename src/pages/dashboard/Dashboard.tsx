@@ -11,14 +11,16 @@ export const DashboardPage = () => {
         <div class="p-2 sm:p-4 overflow-auto scrollbar-thin">
           <Chart2 />
         </div>
-        <Button
-          class="w-fit"
-          onClick={() => {
-            signOut()
-          }}
-        >
-          Sign Out
-        </Button>
+        <div class="flex justify-center p-2">
+          <Button
+            class="w-fit"
+            onClick={() => {
+              signOut()
+            }}
+          >
+            Sign Out
+          </Button>
+        </div>
       </main>
     </>
   )
