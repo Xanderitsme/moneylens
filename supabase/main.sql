@@ -2,7 +2,7 @@
 
 -- Wallets table with proper constraints and data types
 CREATE TABLE wallets (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(100) NOT NULL,
     description TEXT,
     initial_balance DECIMAL(15,2) DEFAULT 0.00,
@@ -35,7 +35,7 @@ CREATE POLICY "Users can delete their own wallets"
 
 -- Categories table with proper constraints and data types
 CREATE TABLE categories (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(50) NOT NULL,
     type VARCHAR(20) CHECK (type IN ('expense', 'income', 'both')) DEFAULT 'both',
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -73,13 +73,13 @@ CREATE POLICY "Users can delete their own categories"
 
 -- Transactions table (formerly expenses_incomes)
 CREATE TABLE transactions (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     amount DECIMAL(15,2) NOT NULL,
     type VARCHAR(20) NOT NULL CHECK (type IN ('expense', 'income')),
     description TEXT,
     transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
-    wallet_id BIGINT NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
-    category_id BIGINT NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+    wallet_id UUID NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
+    category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
