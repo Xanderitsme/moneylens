@@ -1,6 +1,7 @@
 import { onCleanup, onMount } from 'solid-js'
 import ChartJS from 'chart.js/auto'
 import { useLazyInit } from '@/core/hooks/useObserver'
+import { cn } from '@/core/lib/utils'
 
 const getDates = (from: Date, count: number) => {
   return Array.from({ length: count }).map((_, i) => {
@@ -21,7 +22,11 @@ const generateRandomData = (min: number, max: number, count: number) => {
   })
 }
 
-export const Chart = () => {
+interface ChartProps {
+  class?: string
+}
+
+export const Chart = ({ class: className }: ChartProps) => {
   let canvasRef!: HTMLCanvasElement
   let chart: ChartJS | null
 
@@ -85,7 +90,9 @@ export const Chart = () => {
   })
 
   return (
-    <section class="w-full flex flex-col items-center max-w-5xl bg-zinc-900 p-4 rounded-lg">
+    <section
+      class={cn('w-full flex flex-col items-center max-w-5xl', className)}
+    >
       <h3>Incomes vs Outcomes (Last 30 days)</h3>
       <div class="w-full flex overflow-x-auto overflow-y-hidden scrollbar-thin">
         <div class="w-full min-w-80 aspect-[2/1]">

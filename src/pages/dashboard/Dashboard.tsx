@@ -9,7 +9,7 @@ export const DashboardPage = () => {
       <Header title="Dashboard" />
       <main class="h-full flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
         <div class="flex justify-center">
-          <Chart />
+          <Chart class="bg-zinc-900 p-4 rounded-lg" />
         </div>
         <div class="flex justify-center">
           <Button
