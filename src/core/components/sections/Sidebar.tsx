@@ -48,18 +48,18 @@ const links: SidebarLinkType[] = [
     icon: LayoutDashboardIcon
   },
   {
-    href: '/wallets',
+    href: '/dashboard/wallets',
     text: 'Wallets',
     icon: WalletIcon
   },
   {
-    href: '/categories',
+    href: '/dashboard/categories',
     text: 'Categories',
     icon: ShapesIcon
   },
 
   {
-    href: '/transactions',
+    href: '/dashboard/transactions',
     text: 'Transactions',
     icon: ArrowDownUpIcon
   }
@@ -91,7 +91,7 @@ export const Sidebar = () => {
             <For each={links}>
               {(Item) => (
                 <li>
-                  <SidebarLink href={Item.href} aria-current="page">
+                  <SidebarLink href={Item.href} aria-current="page" end>
                     <Show when={Item.icon}>
                       {(icon) => {
                         const ItemIcon = icon()

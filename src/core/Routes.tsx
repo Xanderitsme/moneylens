@@ -10,7 +10,7 @@ import { lazy } from 'solid-js'
 
 const dashboardRoutes = [
   {
-    path: '/dashboard',
+    path: '/',
     component: lazy(() => import('@/pages/dashboard/Dashboard'))
   },
   {
@@ -35,7 +35,7 @@ export const Routes = () => (
       <Route path="/register" component={RegisterPage} />
     </Route>
     <Route component={ProtectedLayout}>
-      <Route component={DashboardLayout}>
+      <Route path="/dashboard" component={DashboardLayout}>
         {dashboardRoutes.map((route) => (
           <Route path={route.path} component={route.component} />
         ))}
