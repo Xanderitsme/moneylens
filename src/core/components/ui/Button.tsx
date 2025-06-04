@@ -47,3 +47,29 @@ export const IconButton = ({
     {props.children}
   </button>
 )
+
+export const ButtonPrimary = ({
+  class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
+  ...props
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label'?: string
+  'aria-describedby'?: string
+}) => (
+  <button
+    class={cn(
+      'flex gap-2 justify-center items-center',
+      'px-3 py-2 bg-primary-600 text-primary-50 text-sm rounded-md font-medium cursor-pointer',
+      'hover:bg-white active:bg-primary-50',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      className
+    )}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
+    {...props}
+  >
+    {props.children}
+  </button>
+)
