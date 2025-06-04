@@ -8,7 +8,7 @@ export const GuestLayout: ParentComponent = (props) => {
 
   createEffect(() => {
     if (auth.session() != null) {
-      navigate('/', { replace: true })
+      navigate('/dashboard', { replace: true })
     }
   })
 
