@@ -13,7 +13,7 @@ export const Header = ({ title }: Props) => (
         <PanelLeftIcon class="size-4 text-primary-50 shrink-0" />
       </IconButton>
       <Show when={title != null}>
-        <span class="text-sm">{title}</span>
+        <span class="text-sm font-medium">{title}</span>
       </Show>
     </div>
   </header>
