@@ -16,9 +16,30 @@ const roundTo = (num: number, digits = 2) => {
   return Number(num.toFixed(digits))
 }
 
-const generateRandomData = (min: number, max: number, count: number) => {
+const generateRandomData = (
+  min: number,
+  max: number,
+  count: number,
+  isNegative?: boolean,
+  maxVariation?: number
+) => {
+  let lastGenerated = min
+  const variation = maxVariation || (max - min) * 0.1
+
   return Array.from({ length: count }).map(() => {
-    return roundTo(Math.random() * max + min) + 1
+    const randomVariation = (Math.random() - 0.5) * 2 * variation
+
+    let newValue = lastGenerated + randomVariation
+
+    newValue = Math.max(min, Math.min(max, newValue))
+
+    newValue = roundTo(newValue)
+
+    const finalValue = newValue * (isNegative ? -1 : 1)
+
+    lastGenerated = newValue
+
+    return finalValue
   })
 }
 
@@ -32,32 +53,32 @@ export const Chart = ({ class: className }: ChartProps) => {
 
   const setupChart = (canvas: HTMLCanvasElement) => {
     const dataCount = 30
-    const maxIncome = 290
-    const maxOutcome = 250
+    const maxIncome = 300
+    const maxOutcome = 300
 
     chart = new ChartJS(canvas, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: getDates(new Date(), dataCount),
         datasets: [
           {
             label: 'Income',
-            data: generateRandomData(0, maxIncome, dataCount),
-            // tension: 0.3,
+            data: generateRandomData(0, maxIncome, dataCount, false, 50),
+            tension: 0.3,
             borderColor: '#5ebfbf',
             pointStyle: 'circle',
-            // pointRadius: 0,
-            // pointHoverRadius: 6,
+            pointRadius: 0,
+            pointHoverRadius: 4,
             backgroundColor: '#5ebfbf'
           },
           {
-            label: 'Outcome',
-            data: generateRandomData(0, maxOutcome, dataCount),
-            // tension: 0.3,
+            label: 'Expense',
+            data: generateRandomData(0, maxOutcome, dataCount, true, 30),
+            tension: 0.3,
             borderColor: '#f66986',
             pointStyle: 'circle',
-            // pointRadius: 0,
-            // pointHoverRadius: 6,
+            pointRadius: 0,
+            pointHoverRadius: 4,
             backgroundColor: '#f66986'
           }
         ]
@@ -93,7 +114,7 @@ export const Chart = ({ class: className }: ChartProps) => {
     <section
       class={cn('w-full flex flex-col items-center max-w-5xl', className)}
     >
-      <h3>Incomes vs Outcomes (Last 30 days)</h3>
+      <h3>Incomes and Expenses in the last 30 days</h3>
       <div class="w-full flex overflow-x-auto overflow-y-hidden scrollbar-thin">
         <div class="w-full min-w-80 aspect-[2/1]">
           <canvas ref={canvasRef}></canvas>
