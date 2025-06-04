@@ -1,15 +1,31 @@
 import { MainLayout } from '@/layouts/MainLayout'
 import { Route, Router } from '@solidjs/router'
-import { DashboardPage } from '@/pages/dashboard/Dashboard'
 import { LoginPage } from '@/pages/auth/Login'
 import { RegisterPage } from '@/pages/auth/Register'
 import { DashboardLayout } from '@/layouts/DashboardLayout'
 import { GuestLayout } from '@/layouts/GuestLayout'
 import { ProtectedLayout } from '@/layouts/ProtectedLayout'
 import { HomePage } from '@/pages/Home'
-import { WalletsPage } from '@/pages/dashboard/Wallets'
-import { CategoriesPage } from '@/pages/dashboard/Categories'
-import { TransactionsPage } from '@/pages/dashboard/Transactions'
+import { lazy } from 'solid-js'
+
+const dashboardRoutes = [
+  {
+    path: '/dashboard',
+    component: lazy(() => import('@/pages/dashboard/Dashboard'))
+  },
+  {
+    path: '/wallets',
+    component: lazy(() => import('@/pages/dashboard/Wallets'))
+  },
+  {
+    path: '/categories',
+    component: lazy(() => import('@/pages/dashboard/Categories'))
+  },
+  {
+    path: '/transactions',
+    component: lazy(() => import('@/pages/dashboard/Transactions'))
+  }
+]
 
 export const Routes = () => (
   <Router root={MainLayout}>
@@ -20,10 +36,9 @@ export const Routes = () => (
     </Route>
     <Route component={ProtectedLayout}>
       <Route component={DashboardLayout}>
-        <Route path="/dashboard" component={DashboardPage} />
-        <Route path="/wallets" component={WalletsPage} />
-        <Route path="/categories" component={CategoriesPage} />
-        <Route path="/transactions" component={TransactionsPage} />
+        {dashboardRoutes.map((route) => (
+          <Route path={route.path} component={route.component} />
+        ))}
       </Route>
     </Route>
   </Router>
