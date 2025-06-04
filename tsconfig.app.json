@@ -27,7 +27,9 @@
     /* Absolute imports */
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@icons/*": ["src/core/components/icons/*"],
+      "@ui/*": ["src/core/components/ui/*"],
     }
   },
   "include": ["src"]
