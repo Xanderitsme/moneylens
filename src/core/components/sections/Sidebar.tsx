@@ -5,6 +5,9 @@ import { cn } from '@/core/lib/utils'
 import { ChevronsUpDownIcon } from '@/core/components/icons/ChevronsUpDownIcon'
 import { LayoutDashboardIcon } from '@/core/components/icons/LayoutDashboardIcon'
 import { For, Show, type JSX } from 'solid-js'
+import { WalletIcon } from '@/core/components/icons/WalletIcon'
+import { ShapesIcon } from '@/core/components/icons/ShapesIcon'
+import { ArrowDownUpIcon } from '@/core/components/icons/ArrowDownUpIcon'
 
 type AriaCurrentType = 'page' | 'location' | 'step' | boolean
 
@@ -46,16 +49,19 @@ const links: SidebarLinkType[] = [
   },
   {
     href: '/wallets',
-    text: 'Wallets'
+    text: 'Wallets',
+    icon: WalletIcon
   },
   {
     href: '/categories',
-    text: 'Categories'
+    text: 'Categories',
+    icon: ShapesIcon
   },
 
   {
     href: '/transactions',
-    text: 'Transactions'
+    text: 'Transactions',
+    icon: ArrowDownUpIcon
   }
 ]
 
