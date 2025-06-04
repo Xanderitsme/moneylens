@@ -48,7 +48,7 @@ export const IconButton = ({
   </button>
 )
 
-export const ButtonPrimary = ({
+export const ButtonFilled = ({
   class: className,
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
@@ -59,10 +59,88 @@ export const ButtonPrimary = ({
 }) => (
   <button
     class={cn(
-      'flex gap-2 justify-center items-center',
-      'px-3 py-2 bg-primary-600 text-primary-50 text-sm rounded-md font-medium cursor-pointer',
-      'hover:bg-white active:bg-primary-50',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+      'flex gap-1 justify-center items-center cursor-pointer',
+      'px-3 py-2.5 bg-primary-900 text-primary-50 text-sm rounded-md font-medium',
+      'not-disabled:hover:bg-primary-800 not-disabled:active:bg-primary-800',
+      'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-current',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      className
+    )}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
+    {...props}
+  >
+    {props.children}
+  </button>
+)
+
+export const ButtonFilledTonal = ({
+  class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
+  ...props
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label'?: string
+  'aria-describedby'?: string
+}) => (
+  <button
+    class={cn(
+      'flex gap-1 justify-center items-center cursor-pointer',
+      'px-3 py-2.5 bg-primary-50 text-primary-950 text-sm rounded-md font-medium',
+      'not-disabled:hover:bg-white not-disabled:active:bg-white',
+      'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-white',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      className
+    )}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
+    {...props}
+  >
+    {props.children}
+  </button>
+)
+
+export const ButtonOutlined = ({
+  class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
+  ...props
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label'?: string
+  'aria-describedby'?: string
+}) => (
+  <button
+    class={cn(
+      'flex gap-1 justify-center items-center cursor-pointer',
+      'px-3 py-2.5 text-zinc-200 border border-current/30 text-sm rounded-md font-medium',
+      'not-disabled:hover:text-primary-100 not-disabled:hover:bg-primary-200/5 not-disabled:active:text-primary-100 not-disabled:active:bg-primary-200/5',
+      'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-current',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      className
+    )}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
+    {...props}
+  >
+    {props.children}
+  </button>
+)
+
+export const ButtonText = ({
+  class: className,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
+  ...props
+}: JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  'aria-label'?: string
+  'aria-describedby'?: string
+}) => (
+  <button
+    class={cn(
+      'flex gap-1 justify-center items-center cursor-pointer',
+      'px-3 py-2.5 text-zinc-200 text-sm rounded-md font-medium',
+      'not-disabled:hover:text-primary-100 not-disabled:hover:bg-primary-200/5 not-disabled:active:text-primary-100 not-disabled:active:bg-primary-200/5',
+      'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-current',
       'disabled:opacity-50 disabled:cursor-not-allowed',
       className
     )}
