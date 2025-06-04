@@ -56,7 +56,7 @@ export const ProtectedLayout: ParentComponent = ({ children }) => {
       <Switch>
         <Match when={shouldShowLoading()}>
           <div class="min-h-screen bg-linear-to-br from-primary-950/10 to-primary-950/5 flex flex-col justify-center items-center">
-            <div class="bg-zinc-900 p-6 rounded-xl shadow-lg border border-primary-500/10 flex items-center space-x-4">
+            <div class="bg-zinc-900 p-4 rounded-md shadow-lg border border-primary-500/10 flex items-center space-x-4">
               <LoaderCircleIcon class="animate-spin shrink-0 h-6 w-6 text-primary-100" />
               <span class="text-primary-50/70 font-medium">
                 Verifing sesion...
