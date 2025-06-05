@@ -64,17 +64,56 @@ const generateWalletData = (count: number = 1) =>
     const balance = income - expense
 
     return {
+      created_at: null,
+      current_balance: balance,
+      description: null,
+      id: '',
+      initial_balance: income,
       name: 'Personal',
-      balance,
-      income,
-      expense
+      updated_at: null,
+      user_id: '',
+      summary: {
+        total_income: income,
+        total_expenses: expense
+      }
     }
   })
 
+interface Wallet {
+  created_at: string | null
+  current_balance: number | null
+  description: string | null
+  id: string
+  initial_balance: number | null
+  name: string
+  updated_at: string | null
+  user_id: string
+}
+
+interface WalletWithSummary extends Wallet {
+  summary: {
+    total_income: number
+    total_expenses: number
+  }
+}
+
 const WalletsPage = () => {
   const { session } = useAuthContext()
-  const [wallets, setWallets] = createSignal(generateWalletData(5))
-  const [error, setError] = createSignal('')
+  const [wallets, setWallets] = createSignal<WalletWithSummary[]>(
+    generateWalletData(10)
+  )
+  const [errorMessage, setErrorMessage] = createSignal('')
+
+  // onMount(async () => {
+  //   const { data, error } = await getWallets()
+
+  //   if (error != null) {
+  //     setErrorMessage(error.message)
+  //     return
+  //   }
+
+  //   setWallets(data)
+  // })
 
   const handleCreateWallet = async () => {
     const currentSession = session()
@@ -92,26 +131,27 @@ const WalletsPage = () => {
 
     if (error != null) {
       console.error(error.message)
-      setError(error.message)
+      setErrorMessage(error.message)
       return
     }
 
     setWallets((prev) => [
       {
-        name: data.name,
-        balance: data.current_balance ?? 0,
-        income: data.initial_balance ?? 0,
-        expense: 0
+        ...data,
+        summary: {
+          total_expenses: 0,
+          total_income: data.initial_balance ?? 0
+        }
       },
       ...prev
     ])
   }
 
   const handleDeleteWallet = async () => {
-    const res = await deleteWallet({ id: 3 })
+    const res = await deleteWallet({ id: '3' })
 
     if (res) {
-      setError(res.error.message)
+      setErrorMessage(res.error.message)
     }
   }
 
@@ -134,8 +174,8 @@ const WalletsPage = () => {
           </div>
 
           {/* <p class="my-6 mx-auto">You don't have any wallet created yet</p> */}
-          <Show when={error().length > 0}>
-            <p class="my-6 mx-auto text-red-400">{error()}</p>
+          <Show when={errorMessage().length > 0}>
+            <p class="my-6 mx-auto text-red-400">{errorMessage()}</p>
           </Show>
 
           <div class="flex flex-wrap justify-center gap-4">
@@ -143,9 +183,9 @@ const WalletsPage = () => {
               {(wallet) => (
                 <WalletCart
                   name={wallet.name}
-                  balance={wallet.balance}
-                  income={wallet.income}
-                  expense={wallet.expense}
+                  balance={wallet.current_balance ?? 0}
+                  income={wallet.summary.total_income}
+                  expense={wallet.summary.total_expenses}
                 />
               )}
             </For>
