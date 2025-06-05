@@ -1,13 +1,11 @@
 import { supabase } from '@/core/services/supabase'
-import type { TablesInsert, Tables } from '@/types/supabase'
-
-type CreateWalletType = Method<
-  TablesInsert<'wallets'>,
-  Tables<'wallets'>,
-  {
-    message: string
-  }
->
+import type {
+  CreateWalletType,
+  DeleteWalletType,
+  GetWalletByIdType,
+  GetWalletsType,
+  WalletWithSummary
+} from '@/types/wallets'
 
 export const createWallet: CreateWalletType = async ({
   user_id,
@@ -35,41 +33,6 @@ export const createWallet: CreateWalletType = async ({
     data: data[0]
   }
 }
-
-type DeleteWalletType = MethodError<{ id: string }, { message: string }>
-
-export const deleteWallet: DeleteWalletType = async ({ id }) => {
-  const { error } = await supabase.from('wallets').delete().eq('id', id)
-
-  if (error) {
-    return { error: { message: error.message } }
-  }
-}
-
-interface Wallet {
-  id: string
-  user_id: string
-  name: string
-  created_at: string | null
-  current_balance: number | null
-  description: string | null
-  initial_balance: number | null
-  updated_at: string | null
-}
-
-interface WalletWithSummary extends Wallet {
-  summary: {
-    total_income: number
-    total_expenses: number
-  }
-}
-
-type GetWalletsType = MethodWithoutArgs<
-  WalletWithSummary[],
-  {
-    message: string
-  }
->
 
 export const getWallets: GetWalletsType = async () => {
   const { data: wallets, error } = await supabase.from('wallets').select(`
@@ -109,5 +72,31 @@ export const getWallets: GetWalletsType = async () => {
 
   return {
     data: walletsWithSummary
+  }
+}
+
+export const getWalletById: GetWalletByIdType = async ({ id }) => {
+  const { data, error } = await supabase.from('wallets').select().eq('id', id)
+
+  if (error != null) {
+    return { error: { message: error.message } }
+  }
+
+  return {
+    data: {
+      ...data[0],
+      summary: {
+        total_income: 0,
+        total_expenses: 0
+      }
+    }
+  }
+}
+
+export const deleteWallet: DeleteWalletType = async ({ id }) => {
+  const { error } = await supabase.from('wallets').delete().eq('id', id)
+
+  if (error) {
+    return { error: { message: error.message } }
   }
 }
