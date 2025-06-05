@@ -33,11 +33,14 @@ CREATE POLICY "Users can delete their own wallets"
     ON wallets FOR DELETE
     USING (user_id = (SELECT auth.uid()));
 
+-- Create enum for category types
+CREATE TYPE categories_type_enum AS ENUM ('expense', 'income', 'both');
+
 -- Categories table with proper constraints and data types
 CREATE TABLE categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(50) NOT NULL,
-    type VARCHAR(20) CHECK (type IN ('expense', 'income', 'both')) DEFAULT 'both',
+    type categories_type_enum DEFAULT 'both',
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -72,10 +75,13 @@ CREATE POLICY "Users can delete their own categories"
     USING (user_id = (SELECT auth.uid()));
 
 -- Transactions table (formerly expenses_incomes)
+-- Create enum for transaction types
+CREATE TYPE transactions_type_enum AS ENUM ('expense', 'income');
+
 CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     amount DECIMAL(15,2) NOT NULL,
-    type VARCHAR(20) NOT NULL CHECK (type IN ('expense', 'income')),
+    type transactions_type_enum NOT NULL,
     description TEXT,
     transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
     wallet_id UUID NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
