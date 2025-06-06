@@ -3,6 +3,32 @@
  */
 alter table public.profiles enable row level security;
 
+-- Allow users to view their own profile
+create POLICY "Users can view their own profile" on public.profiles for
+select
+  using (
+    id = (
+      select
+        auth.uid ()
+    )
+  );
+
+-- Allow users to update their own profile
+create POLICY "Users can update their own profile" on public.profiles for
+update using (
+  id = (
+    select
+      auth.uid ()
+  )
+)
+with
+  check (
+    id = (
+      select
+        auth.uid ()
+    )
+  );
+
 /*
  * Wallets
  */
