@@ -15,12 +15,12 @@ interface Props {
 
 export const AuthContextProvider = (props: Props) => {
   const [session, setSession] = createSignal<Session | null>(null)
-  const [isLoading, setIsLoading] = createSignal<boolean>(false)
+  const [isLoading, setIsLoading] = createSignal<boolean>(true)
   const [errorMessage, setErrorMessage] = createSignal<string | undefined>()
 
-  const signUpNewUser: SignUpType = async ({ email, password }) => {
+  const signUpNewUser: SignUpType = async ({ email, password, name }) => {
     setIsLoading(true)
-    const result = await authController.signUp({ email, password })
+    const result = await authController.signUp({ email, password, name })
     setIsLoading(false)
 
     return result

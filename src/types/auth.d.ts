@@ -4,6 +4,7 @@ export type SignUpType = Method<
   {
     email: string
     password: string
+    name: string
   },
   {
     user: User

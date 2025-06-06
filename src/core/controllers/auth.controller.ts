@@ -6,11 +6,14 @@ import type {
   SignUpType as SignUpType
 } from '@/types/auth'
 
-export const signUp: SignUpType = async ({ email, password }) => {
+export const signUp: SignUpType = async ({ email, password, name }) => {
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        data: { name }
+      }
     })
 
     if (error != null) {

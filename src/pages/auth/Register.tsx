@@ -11,13 +11,15 @@ interface RegisterForm {
   email: string
   password: string
   passwordConfirmation: string
+  name: string
 }
 
 export const RegisterPage = () => {
   const [registerData, setRegisterData] = createSignal<RegisterForm>({
     email: '',
     password: '',
-    passwordConfirmation: ''
+    passwordConfirmation: '',
+    name: ''
   })
   const [error, setError] = createSignal('')
 
@@ -32,8 +34,12 @@ export const RegisterPage = () => {
   ) => {
     e.preventDefault()
 
-    if (registerData().email == '' || registerData().password == '') {
-      setError('Please enter your email and password to create your account')
+    if (
+      registerData().email == '' ||
+      registerData().password == '' ||
+      registerData().name == ''
+    ) {
+      setError('Please enter your data to create your account')
       return
     }
 
@@ -44,7 +50,8 @@ export const RegisterPage = () => {
 
     const { error } = await signUpNewUser({
       email: registerData().email,
-      password: registerData().password
+      password: registerData().password,
+      name: registerData().name
     })
 
     if (error != null) {
@@ -65,6 +72,22 @@ export const RegisterPage = () => {
           </p>
         </header>
         <form class="flex flex-col gap-6 w-full" onSubmit={handleSubmitForm}>
+          <InputLabel
+            text="Name"
+            type="text"
+            autocomplete="name"
+            placeholder="Juan Perez"
+            required
+            value={registerData().name}
+            onChange={(e) => {
+              setError('')
+              setRegisterData((prev) => ({
+                ...prev,
+                name: e.target.value
+              }))
+            }}
+          />
+
           <InputLabel
             text="Email Adress"
             type="email"
