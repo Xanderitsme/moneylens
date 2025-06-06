@@ -3,9 +3,17 @@ import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { cn } from '@/core/lib/utils'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
+const defaultName = 'User'
+
 export const UserBadge = () => {
   const { session, signOut } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
+
+  const user = () => ({
+    initial: session()?.user.user_metadata?.name?.at(0) ?? defaultName.at(0),
+    name: session()?.user.user_metadata?.name ?? defaultName,
+    email: session()?.user.email
+  })
 
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -35,15 +43,15 @@ export const UserBadge = () => {
       >
         <ul>
           <li class="flex items-center overflow-hidden gap-2 border-b border-zinc-800 p-2.5">
-            <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center">
-              A
+            <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center uppercase">
+              {user().initial}
             </span>
             <div class="flex flex-col overflow-hidden">
-              <span class="overflow-hidden text-ellipsis">
-                {session()?.user.user_metadata?.name ?? 'User'}
+              <span class="overflow-hidden text-ellipsis text-nowrap">
+                {user().name}
               </span>
-              <span class="overflow-hidden text-ellipsis text-xs text-zinc-400">
-                {session()?.user.email}
+              <span class="overflow-hidden text-ellipsis text-xs text-zinc-400 text-nowrap">
+                {user().email}
               </span>
             </div>
           </li>
@@ -74,12 +82,12 @@ export const UserBadge = () => {
           isOpen() ? 'bg-primary-200/10' : ''
         )}
       >
-        <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center">
-          A
+        <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center uppercase">
+          {user().initial}
         </span>
-        <div class="flex items-center overflow-hidden">
-          <span class="overflow-hidden text-ellipsis">
-            {session()?.user.email}
+        <div class="flex items-center overflow-hidden grow">
+          <span class="overflow-hidden text-ellipsis text-nowrap">
+            {user().name}
           </span>
         </div>
         <ChevronsUpDownIcon class="size-5" />
