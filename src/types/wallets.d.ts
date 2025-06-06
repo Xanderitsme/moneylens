@@ -27,6 +27,13 @@ type GetWalletByIdType = Method<
 
 type GetWalletsType = MethodWithoutArgs<WalletWithSummary[], GenericError>
 
-type UpdateWalletType = Method<TablesUpdate<'wallets'>, Wallet, GenericError>
+type UpdateWalletType = Method<
+  {
+    id: Wallet['id']
+    update: TablesUpdate<'wallets'>
+  },
+  Wallet,
+  GenericError
+>
 
 type DeleteWalletType = MethodError<{ id: string }, GenericError>

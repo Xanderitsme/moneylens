@@ -4,6 +4,7 @@ import type {
   DeleteWalletType,
   GetWalletByIdType,
   GetWalletsType,
+  UpdateWalletType,
   WalletWithSummary
 } from '@/types/wallets'
 
@@ -90,6 +91,24 @@ export const getWalletById: GetWalletByIdType = async ({ id }) => {
         total_expenses: 0
       }
     }
+  }
+}
+
+export const updateWallet: UpdateWalletType = async ({ id, update }) => {
+  const { data, error } = await supabase
+    .from('wallets')
+    .update({
+      ...update
+    })
+    .eq('id', id)
+    .select()
+
+  if (error != null) {
+    return { error: { message: error.message } }
+  }
+
+  return {
+    data: data[0]
   }
 }
 
