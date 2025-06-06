@@ -10,13 +10,6 @@ type CreateWalletType = Method<
   }
 >
 
-interface WalletWithSummary extends Wallet {
-  summary: {
-    total_income: number
-    total_expenses: number
-  }
-}
-
 type GetWalletByIdType = Method<
   {
     id: Wallet['id']

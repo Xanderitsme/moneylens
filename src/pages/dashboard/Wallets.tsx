@@ -8,16 +8,22 @@ import {
   createWallet,
   deleteWallet
 } from '@/core/controllers/wallets.controller'
+import type { Wallet } from '@/types/wallets'
 import { createSignal, For, Show } from 'solid-js'
 
 interface WalletCartProps {
   name: string
-  balance: number
+  initialBalance: number
   income: number
   expense: number
 }
 
-const WalletCart = ({ name, balance, income, expense }: WalletCartProps) => (
+const WalletCart = ({
+  name,
+  initialBalance,
+  income,
+  expense
+}: WalletCartProps) => (
   <div class="flex flex-col bg-zinc-900 p-4 rounded-lg min-w-64 cursor-pointer border border-zinc-800 hover:border-primary-300/20">
     <header class="flex justify-between items-center">
       <h3 class="font-semibold">{name}</h3>
@@ -26,7 +32,7 @@ const WalletCart = ({ name, balance, income, expense }: WalletCartProps) => (
     <div class="mt-2">
       <p class="text-sm text-zinc-400">Balance</p>
       <p class="font-medium text-lg text-primary-100">
-        S/. {balance.toFixed(2)}
+        S/. {(initialBalance + income - expense).toFixed(2)}
       </p>
     </div>
 
@@ -55,53 +61,30 @@ const WalletCart = ({ name, balance, income, expense }: WalletCartProps) => (
   </div>
 )
 
-const generateWalletData = (count: number = 1) =>
+const generateWalletData = (count: number = 1): Wallet[] =>
   Array.from({ length: count }).map(() => {
     const max = 15000
     const min = 1000
+    const initialBalance = Math.random() * 500 + 100
     const income = Math.random() * max + min
     const expense = Math.max(min, Math.min(income, Math.random() * max + min))
-    const balance = income - expense
 
     return {
-      created_at: null,
-      current_balance: balance,
-      description: null,
+      created_at: '',
+      description: '',
       id: '',
-      initial_balance: income,
+      initial_balance: initialBalance,
       name: 'Personal',
-      updated_at: null,
-      user_id: '',
-      summary: {
-        total_income: income,
-        total_expenses: expense
-      }
+      total_expense: expense,
+      total_income: income,
+      updated_at: '',
+      user_id: ''
     }
   })
 
-interface Wallet {
-  created_at: string | null
-  current_balance: number | null
-  description: string | null
-  id: string
-  initial_balance: number | null
-  name: string
-  updated_at: string | null
-  user_id: string
-}
-
-interface WalletWithSummary extends Wallet {
-  summary: {
-    total_income: number
-    total_expenses: number
-  }
-}
-
 const WalletsPage = () => {
   const { session } = useAuthContext()
-  const [wallets, setWallets] = createSignal<WalletWithSummary[]>(
-    generateWalletData(10)
-  )
+  const [wallets, setWallets] = createSignal<Wallet[]>(generateWalletData(10))
   const [errorMessage, setErrorMessage] = createSignal('')
 
   // onMount(async () => {
@@ -135,16 +118,7 @@ const WalletsPage = () => {
       return
     }
 
-    setWallets((prev) => [
-      {
-        ...data,
-        summary: {
-          total_expenses: 0,
-          total_income: data.initial_balance ?? 0
-        }
-      },
-      ...prev
-    ])
+    setWallets((prev) => [data, ...prev])
   }
 
   const handleDeleteWallet = async () => {
@@ -183,9 +157,9 @@ const WalletsPage = () => {
               {(wallet) => (
                 <WalletCart
                   name={wallet.name}
-                  balance={wallet.current_balance ?? 0}
-                  income={wallet.summary.total_income}
-                  expense={wallet.summary.total_expenses}
+                  initialBalance={wallet.initial_balance}
+                  income={wallet.total_income}
+                  expense={wallet.total_expense}
                 />
               )}
             </For>

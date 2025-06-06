@@ -4,16 +4,14 @@ import type {
   DeleteWalletType,
   GetWalletByIdType,
   GetWalletsType,
-  UpdateWalletType,
-  WalletWithSummary
+  UpdateWalletType
 } from '@/types/wallets'
 
 export const createWallet: CreateWalletType = async ({
   user_id,
   name,
   description,
-  initial_balance,
-  current_balance
+  initial_balance
 }) => {
   const { data, error } = await supabase
     .from('wallets')
@@ -21,8 +19,7 @@ export const createWallet: CreateWalletType = async ({
       user_id,
       name,
       description,
-      initial_balance,
-      current_balance
+      initial_balance
     })
     .select()
 
@@ -36,43 +33,14 @@ export const createWallet: CreateWalletType = async ({
 }
 
 export const getWallets: GetWalletsType = async () => {
-  const { data: wallets, error } = await supabase.from('wallets').select(`
-      *,
-      transactions:transactions(
-        type,
-        amount
-      )
-    `)
+  const { data: wallets, error } = await supabase.from('wallets').select()
 
   if (error) {
     return { error: { message: error.message } }
   }
 
-  const walletsWithSummary: WalletWithSummary[] = wallets.map((wallet) => {
-    const transactions = wallet.transactions
-
-    const summary = transactions.reduce(
-      (acc, transaction) => {
-        if (transaction.type === 'income') {
-          acc.total_income += transaction.amount
-        } else {
-          acc.total_expenses += transaction.amount
-        }
-        return acc
-      },
-      { total_income: 0, total_expenses: 0 }
-    )
-
-    const { transactions: _, ...walletWithoutTransactions } = wallet
-
-    return {
-      ...walletWithoutTransactions,
-      summary
-    }
-  })
-
   return {
-    data: walletsWithSummary
+    data: wallets
   }
 }
 
@@ -84,18 +52,12 @@ export const getWalletById: GetWalletByIdType = async ({ id }) => {
   }
 
   return {
-    data: {
-      ...data[0],
-      summary: {
-        total_income: 0,
-        total_expenses: 0
-      }
-    }
+    data: data[0]
   }
 }
 
 export const updateWallet: UpdateWalletType = async ({ id, update }) => {
-  const { data, error } = await supabase
+  const { data: wallets, error } = await supabase
     .from('wallets')
     .update({
       ...update
@@ -108,7 +70,7 @@ export const updateWallet: UpdateWalletType = async ({ id, update }) => {
   }
 
   return {
-    data: data[0]
+    data: wallets[0]
   }
 }
 
