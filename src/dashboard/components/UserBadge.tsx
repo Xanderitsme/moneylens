@@ -4,7 +4,7 @@ import { cn } from '@/core/lib/utils'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
 export const UserBadge = () => {
-  const { session } = useAuthContext()
+  const { session, signOut } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -53,7 +53,12 @@ export const UserBadge = () => {
             </button>
           </li>
           <li class="p-1">
-            <button class="rounded hover:bg-zinc-800 p-1.5 w-full text-start">
+            <button
+              class="rounded hover:bg-zinc-800 p-1.5 w-full text-start"
+              onClick={() => {
+                signOut()
+              }}
+            >
               Log out
             </button>
           </li>
