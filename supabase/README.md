@@ -1,6 +1,6 @@
 # Configuración de Base de Datos en Supabase
 
-Este directorio contiene todos los archivos SQL necesarios para configurar la base de datos del proyecto de gestión financiera. Los archivos deben ejecutarse en un orden específico para garantizar una configuración correcta.
+Este directorio contiene todos los archivos SQL necesarios para configurar la base de datos del proyecto Moneylens. Los archivos deben ejecutarse en un orden específico para garantizar una configuración correcta.
 
 ## Orden de Ejecución
 
