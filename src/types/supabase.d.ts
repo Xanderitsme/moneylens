@@ -36,34 +36,49 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
-          created_at: string | null
+          created_at: string
           deleted_at: string | null
           id: string
           is_active: boolean
           name: string
-          type: Database['public']['Enums']['categories_type_enum'] | null
-          updated_at: string | null
+          type: Database['public']['Enums']['categories_type']
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           deleted_at?: string | null
           id?: string
           is_active?: boolean
           name: string
-          type?: Database['public']['Enums']['categories_type_enum'] | null
-          updated_at?: string | null
+          type?: Database['public']['Enums']['categories_type']
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           deleted_at?: string | null
           id?: string
           is_active?: boolean
           name?: string
-          type?: Database['public']['Enums']['categories_type_enum'] | null
-          updated_at?: string | null
+          type?: Database['public']['Enums']['categories_type']
+          updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
         }
         Relationships: []
       }
@@ -71,36 +86,36 @@ export type Database = {
         Row: {
           amount: number
           category_id: string
-          created_at: string | null
+          created_at: string
           description: string | null
           id: string
           transaction_date: string
-          type: Database['public']['Enums']['transactions_type_enum']
-          updated_at: string | null
+          type: Database['public']['Enums']['transactions_type']
+          updated_at: string
           user_id: string
           wallet_id: string
         }
         Insert: {
           amount: number
           category_id: string
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
           transaction_date?: string
-          type: Database['public']['Enums']['transactions_type_enum']
-          updated_at?: string | null
+          type: Database['public']['Enums']['transactions_type']
+          updated_at?: string
           user_id: string
           wallet_id: string
         }
         Update: {
           amount?: number
           category_id?: string
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           id?: string
           transaction_date?: string
-          type?: Database['public']['Enums']['transactions_type_enum']
-          updated_at?: string | null
+          type?: Database['public']['Enums']['transactions_type']
+          updated_at?: string
           user_id?: string
           wallet_id?: string
         }
@@ -123,33 +138,36 @@ export type Database = {
       }
       wallets: {
         Row: {
-          created_at: string | null
-          current_balance: number | null
+          created_at: string
           description: string | null
           id: string
-          initial_balance: number | null
+          initial_balance: number
           name: string
-          updated_at: string | null
+          total_expense: number
+          total_income: number
+          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
-          current_balance?: number | null
+          created_at?: string
           description?: string | null
           id?: string
-          initial_balance?: number | null
+          initial_balance?: number
           name: string
-          updated_at?: string | null
+          total_expense?: number
+          total_income?: number
+          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
-          current_balance?: number | null
+          created_at?: string
           description?: string | null
           id?: string
-          initial_balance?: number | null
+          initial_balance?: number
           name?: string
-          updated_at?: string | null
+          total_expense?: number
+          total_income?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -162,8 +180,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      categories_type_enum: 'expense' | 'income' | 'both'
-      transactions_type_enum: 'expense' | 'income'
+      categories_type: 'expense' | 'income' | 'both'
+      transactions_type: 'expense' | 'income'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -282,8 +300,8 @@ export const Constants = {
   },
   public: {
     Enums: {
-      categories_type_enum: ['expense', 'income', 'both'],
-      transactions_type_enum: ['expense', 'income']
+      categories_type: ['expense', 'income', 'both'],
+      transactions_type: ['expense', 'income']
     }
   }
 } as const
