@@ -1,9 +1,14 @@
 /*
+ * Profiles
+ */
+alter table public.profiles enable row level security;
+
+/*
  * Wallets
  */
-alter table wallets enable row level security;
+alter table public.wallets enable row level security;
 
-create POLICY "Users can create their own wallets" on wallets for
+create POLICY "Users can create their own wallets" on public.wallets for
 insert
 with
   check (
@@ -13,7 +18,7 @@ with
     )
   );
 
-create POLICY "Users can view their own wallets" on wallets for
+create POLICY "Users can view their own wallets" on public.wallets for
 select
   using (
     user_id = (
@@ -22,7 +27,7 @@ select
     )
   );
 
-create POLICY "Users can update their own wallets" on wallets for
+create POLICY "Users can update their own wallets" on public.wallets for
 update using (
   user_id = (
     select
@@ -37,7 +42,7 @@ with
     )
   );
 
-create POLICY "Users can delete their own wallets" on wallets for delete using (
+create POLICY "Users can delete their own wallets" on public.wallets for delete using (
   user_id = (
     select
       auth.uid ()
@@ -47,9 +52,9 @@ create POLICY "Users can delete their own wallets" on wallets for delete using (
 /*
  * Categories
  */
-alter table categories enable row level security;
+alter table public.categories enable row level security;
 
-create POLICY "Users can create their own categories" on categories for
+create POLICY "Users can create their own categories" on public.categories for
 insert
 with
   check (
@@ -59,7 +64,7 @@ with
     )
   );
 
-create POLICY "Users can view their own active categories" on categories for
+create POLICY "Users can view their own active categories" on public.categories for
 select
   using (
     user_id = (
@@ -69,7 +74,7 @@ select
     and is_active = true
   );
 
-create POLICY "Users can update their own categories" on categories for
+create POLICY "Users can update their own categories" on public.categories for
 update using (
   user_id = (
     select
@@ -84,7 +89,7 @@ with
     )
   );
 
-create POLICY "Users can delete their own categories" on categories for delete using (
+create POLICY "Users can delete their own categories" on public.categories for delete using (
   user_id = (
     select
       auth.uid ()
@@ -94,9 +99,9 @@ create POLICY "Users can delete their own categories" on categories for delete u
 /*
  * Transactions
  */
-alter table transactions enable row level security;
+alter table public.transactions enable row level security;
 
-create POLICY "Users can create transactions in their own wallets" on transactions for
+create POLICY "Users can create transactions in their own wallets" on public.transactions for
 insert
 with
   check (
@@ -130,7 +135,7 @@ with
     )
   );
 
-create POLICY "Users can view their own transactions" on transactions for
+create POLICY "Users can view their own transactions" on public.transactions for
 select
   using (
     user_id = (
@@ -139,7 +144,7 @@ select
     )
   );
 
-create POLICY "Users can update their own transactions" on transactions for
+create POLICY "Users can update their own transactions" on public.transactions for
 update using (
   user_id = (
     select
@@ -178,7 +183,7 @@ with
     )
   );
 
-create POLICY "Users can delete their own transactions" on transactions for delete using (
+create POLICY "Users can delete their own transactions" on public.transactions for delete using (
   user_id = (
     select
       auth.uid ()

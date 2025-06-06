@@ -1,5 +1,12 @@
 create table
-  wallets (
+  public.profiles (
+    id uuid not null references auth.users on delete cascade,
+    name text,
+    primary key (id)
+  );
+
+create table
+  public.wallets (
     id uuid primary key default gen_random_uuid (),
     user_id uuid not null references auth.users (id) on delete cascade,
     name varchar(255) not null,
@@ -18,7 +25,7 @@ create table
 create type categories_type as enum('expense', 'income', 'both');
 
 create table
-  categories (
+  public.categories (
     id uuid primary key default gen_random_uuid (),
     user_id uuid not null references auth.users (id) on delete cascade,
     name varchar(255) not null,
@@ -42,7 +49,7 @@ where
 create type transactions_type as enum('expense', 'income');
 
 create table
-  transactions (
+  public.transactions (
     id uuid primary key default gen_random_uuid (),
     user_id uuid not null references auth.users (id) on delete cascade,
     wallet_id uuid not null references wallets (id) on delete cascade,

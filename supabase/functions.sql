@@ -2,23 +2,23 @@
 create
 or
 replace
-  function update_updated_at_column () returns trigger security definer
+  function public.update_updated_at_column () returns trigger language plpgsql security definer
 set
-  search_path = public as $$ begin new.updated_at = current_timestamp;
+  search_path = "" as $$ begin new.updated_at = current_timestamp;
 
 return new;
 
 end;
 
-$$ language 'plpgsql';
+$$;
 
 -- Trigger to update wallet balance when transactions are added/updated/deleted
 create
 or
 replace
-  function update_wallet_balance () returns trigger security definer
+  function public.update_wallet_balance () returns trigger language plpgsql security definer
 set
-  search_path = public as $$ begin if TG_OP = 'INSERT' then
+  search_path = "" as $$ begin if TG_OP = 'INSERT' then
 update wallets
 set
   total_income = case
@@ -72,15 +72,15 @@ return null;
 
 end;
 
-$$ language plpgsql;
+$$;
 
 -- Function to handle soft delete for categories
 create
 or
 replace
-  function soft_delete_category () returns trigger security definer
+  function public.soft_delete_category () returns trigger language plpgsql security definer
 set
-  search_path = public as $$ begin
+  search_path = "" as $$ begin
 update categories
 set
   is_active = false,
@@ -93,4 +93,19 @@ return null;
 
 end;
 
-$$ language plpgsql;
+$$;
+
+-- inserts a row into public.profiles
+create function public.handle_new_user () returns trigger language plpgsql security definer
+set
+  search_path = '' as $$ begin
+insert into
+  public.profiles (id, name)
+values
+  (new.id, new.raw_user_meta_data ->> 'name');
+
+return new;
+
+end;
+
+$$;
