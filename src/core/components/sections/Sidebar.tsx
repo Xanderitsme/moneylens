@@ -1,13 +1,12 @@
 import { CoinsIcon } from '@/core/components/icons/CoinsIcon'
 import { A, type AnchorProps } from '@solidjs/router'
-import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { cn } from '@/core/lib/utils'
-import { ChevronsUpDownIcon } from '@/core/components/icons/ChevronsUpDownIcon'
 import { LayoutDashboardIcon } from '@/core/components/icons/LayoutDashboardIcon'
 import { For, Show, type JSX } from 'solid-js'
 import { WalletIcon } from '@/core/components/icons/WalletIcon'
 import { ShapesIcon } from '@/core/components/icons/ShapesIcon'
 import { ArrowDownUpIcon } from '@/core/components/icons/ArrowDownUpIcon'
+import { UserBadge } from '@/dashboard/components/UserBadge'
 
 type AriaCurrentType = 'page' | 'location' | 'step' | boolean
 
@@ -66,8 +65,6 @@ const links: SidebarLinkType[] = [
 ]
 
 export const Sidebar = () => {
-  const { session } = useAuthContext()
-
   return (
     <aside class="w-64 h-full shrink-0 flex flex-col">
       <header class="p-2">
@@ -107,17 +104,7 @@ export const Sidebar = () => {
         </div>
       </nav>
       <footer class="p-2">
-        <button class="text-sm p-2 rounded-md w-full flex items-center gap-2 hover:bg-primary-200/10 outline-none focus-visible:ring-2 ring-primary-200/30">
-          <span class="rounded-full bg-primary-200/50 aspect-square shrink-0 size-8 flex justify-center items-center">
-            A
-          </span>
-          <div class="flex items-center overflow-hidden">
-            <span class="overflow-hidden text-ellipsis">
-              {session()?.user.email}
-            </span>
-          </div>
-          <ChevronsUpDownIcon class="size-5" />
-        </button>
+        <UserBadge />
       </footer>
     </aside>
   )
