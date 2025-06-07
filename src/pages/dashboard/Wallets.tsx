@@ -2,14 +2,11 @@ import { PlusIcon } from '@/core/components/icons/PlusIcon'
 import { TrendingDownIcon } from '@/core/components/icons/TrendingDownIcon'
 import { TrendingUpIcon } from '@/core/components/icons/TrendingUpIcon'
 import { Header } from '@/core/components/sections/Header'
-import { ButtonFilled, ButtonOutlined } from '@/core/components/ui/Button'
+import { ButtonFilled, ButtonFilledTonal, ButtonOutlined } from '@/core/components/ui/Button'
 import { useAuthContext } from '@/core/context/auth/auth.provider'
-import {
-  createWallet,
-  deleteWallet
-} from '@/core/controllers/wallets.controller'
+import { createWallet } from '@/core/controllers/wallets.controller'
 import type { Wallet } from '@/types/wallets'
-import { createSignal, For, Show } from 'solid-js'
+import { createSignal, For, Match, Switch } from 'solid-js'
 
 interface WalletCartProps {
   name: string
@@ -63,9 +60,9 @@ const WalletCart = ({
 
 const generateWalletData = (count: number = 1): Wallet[] =>
   Array.from({ length: count }).map(() => {
-    const max = 15000
-    const min = 1000
-    const initialBalance = Math.random() * 500 + 100
+    const max = 150
+    const min = 50
+    const initialBalance = Math.random() * 70 + 10
     const income = Math.random() * max + min
     const expense = Math.max(min, Math.min(income, Math.random() * max + min))
 
@@ -82,21 +79,10 @@ const generateWalletData = (count: number = 1): Wallet[] =>
     }
   })
 
-const WalletsPage = () => {
+const WalletsList = () => {
   const { session } = useAuthContext()
-  const [wallets, setWallets] = createSignal<Wallet[]>(generateWalletData(10))
+  const [wallets, setWallets] = createSignal<Wallet[]>(generateWalletData(5))
   const [errorMessage, setErrorMessage] = createSignal('')
-
-  // onMount(async () => {
-  //   const { data, error } = await getWallets()
-
-  //   if (error != null) {
-  //     setErrorMessage(error.message)
-  //     return
-  //   }
-
-  //   setWallets(data)
-  // })
 
   const handleCreateWallet = async () => {
     const currentSession = session()
@@ -121,37 +107,25 @@ const WalletsPage = () => {
     setWallets((prev) => [data, ...prev])
   }
 
-  const handleDeleteWallet = async () => {
-    const res = await deleteWallet({ id: '3' })
+  // onMount(async () => {
+  //   const { data, error } = await getWallets()
 
-    if (res) {
-      setErrorMessage(res.error.message)
-    }
-  }
+  //   if (error != null) {
+  //     setErrorMessage(error.message)
+  //     return
+  //   }
+
+  //   setWallets(data)
+  // })
 
   return (
-    <>
-      <Header title="Wallets" />
-      <main class="grow flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
-        <section class="flex flex-col container mx-auto">
-          <div class="flex justify-end gap-2">
-            <ButtonFilled onClick={handleCreateWallet}>
-              <PlusIcon class="size-5" />
-              <span>Create</span>
-            </ButtonFilled>
-            <ButtonFilled onClick={handleDeleteWallet}>
-              <span>Delete</span>
-            </ButtonFilled>
-            <ButtonFilled>
-              <span>Fetch</span>
-            </ButtonFilled>
-          </div>
+    <section class="flex flex-col container mx-auto mt-4">
+      <Switch>
+        <Match when={errorMessage().length > 0}>
+          <p class="my-6 mx-auto text-red-400">{errorMessage()}</p>
+        </Match>
 
-          {/* <p class="my-6 mx-auto">You don't have any wallet created yet</p> */}
-          <Show when={errorMessage().length > 0}>
-            <p class="my-6 mx-auto text-red-400">{errorMessage()}</p>
-          </Show>
-
+        <Match when={wallets().length > 0}>
           <div class="flex flex-wrap justify-center gap-4">
             <For each={wallets()}>
               {(wallet) => (
@@ -164,7 +138,25 @@ const WalletsPage = () => {
               )}
             </For>
           </div>
-        </section>
+        </Match>
+      </Switch>
+    </section>
+  )
+}
+
+const WalletsPage = () => {
+  return (
+    <>
+      <Header title="Wallets" />
+      <main class="grow flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
+        <div class="flex justify-end gap-2">
+          <ButtonFilledTonal>
+            <PlusIcon class="size-5" />
+            <span>Create</span>
+          </ButtonFilledTonal>
+        </div>
+
+        <WalletsList />
       </main>
     </>
   )
