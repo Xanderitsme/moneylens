@@ -1,4 +1,6 @@
+import { Header } from '@/core/components/sections/Header'
 import { Sidebar } from '@/core/components/sections/Sidebar'
+import { PageContextProvider } from '@/core/context/page/page.provider'
 import type { ParentComponent } from 'solid-js'
 
 export const DashboardLayout: ParentComponent = (props) => {
@@ -7,7 +9,12 @@ export const DashboardLayout: ParentComponent = (props) => {
       <Sidebar />
       <div class="h-full grow sm:p-2 pl-0 overflow-auto">
         <div class="sm:rounded-lg overflow-hidden bg-zinc-950 h-full">
-          <div class="bg-primary-950/10 h-full flex flex-col">{props.children}</div>
+          <div class="bg-primary-950/10 h-full flex flex-col">
+            <PageContextProvider>
+              <Header />
+              {props.children}
+            </PageContextProvider>
+          </div>
         </div>
       </div>
     </div>
