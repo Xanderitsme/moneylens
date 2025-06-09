@@ -6,10 +6,11 @@ import { cn } from '@/core/lib/utils'
 
 interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
   text?: string
+  error?: string
   labelProps?: JSX.LabelHTMLAttributes<HTMLLabelElement>
 }
 
-export const InputLabel = ({ text, labelProps, ...props }: Props) => {
+export const InputLabel = ({ text, error, labelProps, ...props }: Props) => {
   const { class: className, ...lbProps } = labelProps ?? {}
 
   return (
@@ -18,6 +19,9 @@ export const InputLabel = ({ text, labelProps, ...props }: Props) => {
         <p class="text-sm self-start">{text}</p>
       </Show>
       <Input {...props} />
+      <Show when={error != null}>
+        <p class="text-red-400 text-sm">{error}</p>
+      </Show>
     </Label>
   )
 }
