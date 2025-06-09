@@ -42,6 +42,8 @@ with
       select
         auth.uid ()
     )
+    and total_income = 0
+    and total_expense = 0
   );
 
 create POLICY "Users can view their own wallets" on public.wallets for
@@ -53,7 +55,7 @@ select
     )
   );
 
-create POLICY "Users can update their own wallets" on public.wallets for
+create POLICY "Users can update their own wallets except totals" on public.wallets for
 update using (
   user_id = (
     select
@@ -62,9 +64,18 @@ update using (
 )
 with
   check (
-    user_id = (
-      select
-        auth.uid ()
+    user_id = auth.uid ()
+    and (
+      (
+        total_income is not distinct
+        from
+          old.total_income
+      )
+      and (
+        total_expense is not distinct
+        from
+          old.total_expense
+      )
     )
   );
 
