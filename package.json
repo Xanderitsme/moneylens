@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.5",
+    "@kobalte/core": "^0.13.10",
     "@solidjs/router": "^0.15.3",
     "@supabase/supabase-js": "^2.49.8",
     "@tailwindcss/vite": "4.1.8",
