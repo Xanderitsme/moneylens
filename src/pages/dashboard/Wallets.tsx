@@ -13,11 +13,15 @@ const WalletsPage = () => {
     setHeaderTitle('Wallets')
   })
 
+  const onChangeWallets = () => {
+    queryClient.invalidateQueries({ queryKey: ['wallets'] })
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <main class="grow flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
         <div class="flex justify-end gap-2">
-          <ButtonCreateWallet />
+          <ButtonCreateWallet onChangeWallets={onChangeWallets} />
         </div>
 
         <WalletsList />

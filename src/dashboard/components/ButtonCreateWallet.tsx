@@ -10,6 +10,8 @@ import {
   DialogTrigger
 } from '@/core/components/ui/Dialog'
 import { InputLabel } from '@/core/components/ui/InputLabel'
+import { useAuthContext } from '@/core/context/auth/auth.provider'
+import { createWallet } from '@/core/controllers/wallets.controller'
 import { createEffect, createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -19,7 +21,12 @@ interface CreateWalletForm {
   initialBalance?: number
 }
 
-export const ButtonCreateWallet = () => {
+interface Props {
+  onChangeWallets: () => void
+}
+
+export const ButtonCreateWallet = ({ onChangeWallets }: Props) => {
+  const { session } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
   const [walletData, setWalletData] = createSignal<CreateWalletForm>({
     name: ''
@@ -39,7 +46,29 @@ export const ButtonCreateWallet = () => {
       return
     }
 
+    const userSession = session()
+
+    if (userSession == null) {
+      setError("Couldn't create the wallet, your session has expired")
+      return
+    }
+
+    const { user } = userSession
+
+    const { error } = await createWallet({
+      user_id: user.id,
+      name: walletData().name,
+      description: walletData().description,
+      initial_balance: walletData().initialBalance
+    })
+
+    if (error != null) {
+      setError('Unexpected error creating the wallet, please try again')
+      return
+    }
+
     setIsOpen(false)
+    onChangeWallets()
   }
 
   const resetForm = () => {
