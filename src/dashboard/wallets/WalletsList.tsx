@@ -1,5 +1,5 @@
 import { getWallets } from '@/core/controllers/wallets.controller'
-import { WalletCart } from '@/dashboard/components/WalletCard'
+import { WalletCart } from '@/dashboard/wallets/WalletCard'
 import { useQuery } from '@tanstack/solid-query'
 import { For, Match, Show, Switch } from 'solid-js'
 

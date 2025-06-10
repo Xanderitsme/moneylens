@@ -1,6 +1,6 @@
 import { usePageContext } from '@/core/context/page/page.provider'
-import { ButtonCreateWallet } from '@/dashboard/components/ButtonCreateWallet'
-import { WalletsList } from '@/dashboard/components/WalletsList'
+import { ButtonCreateWallet } from '@/dashboard/wallets/ButtonCreateWallet'
+import { WalletsList } from '@/dashboard/wallets/WalletsList'
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import { onMount } from 'solid-js'
 
