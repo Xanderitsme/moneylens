@@ -12,6 +12,7 @@ import {
 import { InputLabel } from '@/core/components/ui/InputLabel'
 import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { createWallet } from '@/core/controllers/wallets.controller'
+import { useQueryClient } from '@tanstack/solid-query'
 import { createEffect, createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -21,11 +22,9 @@ interface CreateWalletForm {
   initialBalance?: number
 }
 
-interface Props {
-  onChangeWallets: () => void
-}
+export const ButtonCreateWallet = () => {
+  const queryClient = useQueryClient()
 
-export const ButtonCreateWallet = ({ onChangeWallets }: Props) => {
   const { session } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
   const [walletData, setWalletData] = createSignal<CreateWalletForm>({
@@ -68,7 +67,8 @@ export const ButtonCreateWallet = ({ onChangeWallets }: Props) => {
     }
 
     setIsOpen(false)
-    onChangeWallets()
+
+    queryClient.invalidateQueries({ queryKey: ['wallets'] })
   }
 
   const resetForm = () => {
