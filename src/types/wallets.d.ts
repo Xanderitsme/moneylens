@@ -14,11 +14,11 @@ type GetWalletByIdType = Method<
   {
     id: Wallet['id']
   },
-  WalletWithSummary,
+  Wallet,
   GenericError
 >
 
-type GetWalletsType = MethodWithoutArgs<WalletWithSummary[], GenericError>
+type GetWalletsType = MethodWithoutArgs<Wallet[], GenericError>
 
 type UpdateWalletType = Method<
   {

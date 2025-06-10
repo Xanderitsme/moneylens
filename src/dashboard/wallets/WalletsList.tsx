@@ -38,6 +38,7 @@ export const WalletsList = () => {
               <For each={query.data?.data}>
                 {(wallet) => (
                   <WalletCart
+                    id={wallet.id}
                     name={wallet.name}
                     initialBalance={wallet.initial_balance}
                     income={wallet.total_income}
