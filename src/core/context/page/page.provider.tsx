@@ -1,4 +1,4 @@
-import { createEffect, createSignal, useContext } from 'solid-js'
+import { createSignal, useContext } from 'solid-js'
 import {
   PageContext,
   type PageContextType
@@ -11,10 +11,6 @@ interface Props {
 
 export const PageContextProvider = (props: Props) => {
   const [headerTitle, setHeaderTitle] = createSignal<string | undefined>()
-
-  createEffect(() => {
-    console.log(headerTitle())
-  })
 
   return (
     <PageContext.Provider
