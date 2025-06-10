@@ -47,6 +47,11 @@ const links: SidebarLinkType[] = [
     icon: LayoutDashboardIcon
   },
   {
+    href: '/dashboard/transactions',
+    text: 'Transactions',
+    icon: ArrowDownUpIcon
+  },
+  {
     href: '/dashboard/wallets',
     text: 'Wallets',
     icon: WalletIcon
@@ -55,12 +60,6 @@ const links: SidebarLinkType[] = [
     href: '/dashboard/categories',
     text: 'Categories',
     icon: ShapesIcon
-  },
-
-  {
-    href: '/dashboard/transactions',
-    text: 'Transactions',
-    icon: ArrowDownUpIcon
   }
 ]
 
