@@ -38,15 +38,15 @@ export const createTransaction: CreateTransactionType = async ({
 
 const generateTransactionsData = (count: number = 1): Transaction[] =>
   Array.from({ length: count }).map(() => {
-    const max = 1250
-    const min = 50
+    const max = 3250
+    const min = 5
     const amount = Math.random() * max + min
     const type = Math.random() > 0.5 ? 'expense' : 'income'
 
     return {
       id: '',
       user_id: '91e341af-c6cc-496c-8d7c-f1e94c4cf5dc',
-      wallet_id: 'BCP',
+      wallet_id: 'Efectivo',
       category_id: 'Food',
       amount,
       type,
