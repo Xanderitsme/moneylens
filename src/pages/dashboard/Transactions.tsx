@@ -1,4 +1,5 @@
 import { usePageContext } from '@/core/context/page/page.provider'
+import { TransactionsList } from '@/dashboard/transactions/TransactionsList'
 import { onMount } from 'solid-js'
 
 const TransactionsPage = () => {
@@ -11,7 +12,9 @@ const TransactionsPage = () => {
   return (
     <>
       <main class="grow flex flex-col p-2 sm:p-4 overflow-auto scrollbar-thin">
-        <div>Transaction page</div>
+        <section class="container mx-auto">
+          <TransactionsList />
+        </section>
       </main>
     </>
   )
