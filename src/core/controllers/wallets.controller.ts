@@ -32,42 +32,15 @@ export const createWallet: CreateWalletType = async ({
   }
 }
 
-// const generateWalletData = (count: number = 1) =>
-//   Array.from({ length: count }).map(() => {
-//     const max = 150
-//     const min = 50
-//     const initialBalance = Math.random() * 70 + 10
-//     const income = Math.random() * max + min
-//     const expense = Math.max(min, Math.min(income, Math.random() * max + min))
-
-//     return {
-//       created_at: '',
-//       description: '',
-//       id: '',
-//       initial_balance: initialBalance,
-//       name: 'Personal',
-//       total_expense: expense,
-//       total_income: income,
-//       updated_at: '',
-//       user_id: ''
-//     }
-//   })
-
 export const getWallets: GetWalletsType = async () => {
-  const { data: wallets, error } = await supabase
-    .from('wallets')
-    .select()
-    .order('name')
+  const { data, error } = await supabase.from('wallets').select().order('name')
 
   if (error) {
     return { error: { message: error.message } }
   }
 
-  // await new Promise((resolve) => setTimeout(resolve, 2000))
-  // const wallets = generateWalletData(10)
-
   return {
-    data: wallets
+    data: data
   }
 }
 
