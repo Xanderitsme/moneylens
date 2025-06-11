@@ -18,6 +18,7 @@ import type { DOMElement } from 'solid-js/jsx-runtime'
 
 interface CreateTransactionForm {
   walletId?: string
+  categoryId?: string
   type?: string
   description?: string
   amount?: number
@@ -25,6 +26,9 @@ interface CreateTransactionForm {
 }
 
 export const ButtonCreateTransaction = () => {
+  // const queryClient = useQueryClient()
+
+  // const { session } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
   const [transactionData, setTransactionData] =
     createSignal<CreateTransactionForm>({})
@@ -37,6 +41,21 @@ export const ButtonCreateTransaction = () => {
     }
   ) => {
     e.preventDefault()
+
+    if (transactionData().walletId == null) {
+      setError('Please select the wallet')
+      return
+    }
+
+    if (transactionData().type == null) {
+      setError('Please select the type')
+      return
+    }
+
+    if (transactionData().amount == null) {
+      setError('Please select the amount')
+      return
+    }
 
     setIsOpen(false)
   }
@@ -94,8 +113,23 @@ export const ButtonCreateTransaction = () => {
             />
           </Label>
 
+          <Label text="Category">
+            <InputSelect
+              class="w-full"
+              options={[
+                { value: 'food', label: 'Food' },
+                {
+                  value: 'transport',
+                  label: 'Transporte'
+                }
+              ]}
+              placeholder="Select a category"
+              aria-label="Category"
+            />
+          </Label>
+
           <div class="flex gap-4 items-stretch">
-            <Label text="Type" class='grow'>
+            <Label text="Type" class="grow">
               <InputSelect
                 options={[
                   { value: 'income', label: 'Income' },
@@ -106,7 +140,7 @@ export const ButtonCreateTransaction = () => {
               />
             </Label>
 
-            <Label text="Date" class='grow'>
+            <Label text="Date" class="grow">
               <Input type="date" class="w-full h-full" />
             </Label>
           </div>
