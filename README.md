@@ -1,4 +1,4 @@
-# MoneyLens 🔍
+# MoneyLens
 
 MoneyLens es una aplicación moderna de gestión financiera personal que te permite tener una visión clara y detallada de tus finanzas. Organiza tus ingresos y gastos en diferentes billeteras, categoriza tus transacciones y mantén el control total de tu dinero.
 
