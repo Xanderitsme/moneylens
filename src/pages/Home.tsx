@@ -1,3 +1,5 @@
+import { Navigate } from '@solidjs/router'
+
 export const HomePage = () => {
-  return <div>Home page</div>
+  return <Navigate href="/login" />
 }

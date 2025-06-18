@@ -41,5 +41,6 @@ export const Routes = () => (
         ))}
       </Route>
     </Route>
+    <Route path="*" component={lazy(() => import('@/pages/404'))} />
   </Router>
 )
