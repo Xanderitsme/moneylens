@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+/* @import "tailwind-animate"; */
 
 @layer {
   :root {
@@ -38,4 +39,44 @@
 
 @utility scrollbar-thin {
   scrollbar-width: thin;
+}
+
+@theme {
+  --animate-fade-in: fade-in 100ms ease-in-out forwards;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  --animate-fade-out: fade-out 100ms ease-in-out forwards;
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}
+
+@utility animation-duration-150 {
+  animation-duration: 150ms;
+}
+
+@utility animation-duration-200 {
+  animation-duration: 200ms;
+}
+
+@utility animation-duration-250 {
+  animation-duration: 250ms;
 }
