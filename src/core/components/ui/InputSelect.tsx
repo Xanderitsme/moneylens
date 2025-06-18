@@ -1,12 +1,14 @@
 import {
   Select,
   SelectContent,
+  SelectHiddenSelect,
   SelectItem,
   SelectTrigger,
   SelectValue
 } from '@/core/components/ui/Select'
 import { cn } from '@/core/lib/utils'
 import type { SelectBaseItemComponentProps } from '@kobalte/core/src/select/select-base.jsx'
+import { Show } from 'solid-js'
 import type { JSX } from 'solid-js/jsx-runtime'
 
 interface SelectOption {
@@ -16,6 +18,7 @@ interface SelectOption {
 }
 
 interface Props {
+  hiddenSelect?: boolean
   options: SelectOption[]
   class?: string
   placeholder?: JSX.Element
@@ -25,6 +28,7 @@ interface Props {
 }
 
 export const InputSelect = ({
+  hiddenSelect,
   options,
   class: className,
   placeholder,
@@ -44,6 +48,9 @@ export const InputSelect = ({
       <SelectItem item={props.item}>{props.item.rawValue.label}</SelectItem>
     )}
   >
+    <Show when={hiddenSelect === true}>
+      <SelectHiddenSelect />
+    </Show>
     <SelectTrigger aria-label={ariaLabel} class={cn('w-48', className)}>
       <SelectValue<SelectOption>>
         {(state) => state.selectedOption().label}

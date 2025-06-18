@@ -63,6 +63,8 @@ const SelectContent = <T extends ValidComponent = 'div'>(
       <SelectPrimitive.Content
         class={cn(
           'relative z-50 min-w-32 overflow-hidden rounded-md border border-input bg-zinc-900 text-zinc-300 shadow-md animate-in fade-in-80',
+          'data-[expanded]:animate-in data-[expanded]:fade-in data-[expanded]:slide-in-from-top-4',
+          'data-[closed]:animate-out data-[closed]:fade-out data-[closed]:slide-out-to-top-4',
           local.class
         )}
         {...others}
