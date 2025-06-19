@@ -1,4 +1,5 @@
 import { supabase } from '@/core/services/supabase'
+import { generateCategoriesData } from '@/helpers/data.create'
 import type {
   CreateCategoryType,
   DeleteCategoryType,
@@ -30,14 +31,16 @@ export const createCategory: CreateCategoryType = async ({
 }
 
 export const getCategories: GetCategoriesType = async () => {
-  const { data, error } = await supabase
-    .from('categories')
-    .select()
-    .order('name')
+  // const { data, error } = await supabase
+  //   .from('categories')
+  //   .select()
+  //   .order('name')
 
-  if (error) {
-    return { error: { message: error.message } }
-  }
+  // if (error) {
+  //   return { error: { message: error.message } }
+  // }
+
+  const data = await generateCategoriesData(5, 2)
 
   return {
     data: data
