@@ -12,6 +12,8 @@ import {
 import { InputLabel } from '@/core/components/ui/InputLabel'
 import { InputSelect } from '@/core/components/ui/InputSelect'
 import { Label } from '@/core/components/ui/Label'
+import { useAuthContext } from '@/core/context/auth/auth.provider'
+import { createCategory } from '@/core/controllers/categories.controller'
 import { createEffect, createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -21,6 +23,8 @@ interface CreateCategoryForm {
 }
 
 export const ButtonCreateCategory = () => {
+  const { session } = useAuthContext()
+
   const [isOpen, setIsOpen] = createSignal(false)
   const [categoryData, setCategoryData] = createSignal<CreateCategoryForm>({})
   const [error, setError] = createSignal<string>()
@@ -31,10 +35,14 @@ export const ButtonCreateCategory = () => {
   }>()
 
   createEffect(() => {
-    setCategoryData((prev) => ({
-      ...prev,
-      type: currentOption()?.value
-    }))
+    setCategoryData((prev) => {
+      setError()
+
+      return {
+        ...prev,
+        type: currentOption()?.value
+      }
+    })
   })
 
   const handleSubmitForm = async (
@@ -45,13 +53,40 @@ export const ButtonCreateCategory = () => {
   ) => {
     e.preventDefault()
 
-    if (categoryData().name == null) {
+    const { name, type } = categoryData()
+
+    if (name == null) {
       setError('Please enter a name')
       return
     }
 
-    if (categoryData().type == null) {
-      setError('Please select the type')
+    if (
+      type != null &&
+      type != 'expense' &&
+      type != 'income' &&
+      type != 'both'
+    ) {
+      setError('Invalid type')
+      return
+    }
+
+    const userSession = session()
+
+    if (userSession == null) {
+      setError("Couldn't create the wallet, your session has expired")
+      return
+    }
+
+    const { user } = userSession
+
+    const { error } = await createCategory({
+      user_id: user.id,
+      name: name,
+      type: type
+    })
+
+    if (error != null) {
+      setError('Unexpected error creating the category, please try again')
       return
     }
 
