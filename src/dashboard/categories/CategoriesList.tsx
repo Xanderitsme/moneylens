@@ -1,39 +1,59 @@
-import { ButtonOutlined } from '@/core/components/ui/Button'
-import { cn } from '@/core/lib/utils'
-import { createSignal, Show } from 'solid-js'
+import { getCategories } from '@/core/controllers/categories.controller'
+import { useQuery } from '@tanstack/solid-query'
+import { For, Match, Show, Switch } from 'solid-js'
+
+const Fallback = () => (
+  <p class="text-primary-100/60 mt-4 mx-auto">
+    You don't have any category yet, create one first
+  </p>
+)
 
 export const CategoriesList = () => {
-  const [isVisible, setIsVisible] = createSignal(false)
-  // let hideTimer: NodeJS.Timeout | null
-
-  // const hideItem = () => {
-  //   hideTimer = setTimeout(() => {
-  //     setIsVisible(false)
-  //   }, 200)
-  // }
-
-  const toggleVisibility = () => {
-    setIsVisible((prev) => {
-      return !prev
-    })
-  }
+  const query = useQuery(() => ({
+    queryKey: ['categories'],
+    queryFn: () => getCategories()
+  }))
 
   return (
     <section class="container mx-auto">
-      <div>This is a list</div>
-      <ButtonOutlined onClick={toggleVisibility}>Toggle</ButtonOutlined>
+      <Switch>
+        <Match when={query.isPending}>
+          <p class="mt-4 mx-auto">Loading...</p>
+        </Match>
+        <Match when={query.isError || query.data?.error}>
+          <p class="mt-4 mx-auto text-red-300">
+            Error: {query.error?.message ?? query.data?.error?.message}
+          </p>
+        </Match>
 
-      {/* <Show when={isVisible()}> */}
-      <div
-        class={cn(
-          'mt-16 p-4 rounded-lg bg-zinc-900 w-fit max-w-48 border border-zinc-800 origin-top',
-          isVisible() ? 'animate-fade-in' : 'animate-fade-out'
-        )}
-      >
-        A UI toolkit for building accessible web apps and design systems with
-        SolidJS.
-      </div>
-      {/* </Show> */}
+        <Match when={query.isSuccess}>
+          <Show
+            when={
+              query.data?.data?.length != null && query.data.data.length > 0
+            }
+            fallback={<Fallback />}
+          >
+            <div class="flex flex-wrap justify-center gap-4">
+              <For each={query.data?.data}>
+                {(c) => (
+                  <div class="flex flex-col items-center p-4 border border-white/10 rounded-lg">
+                    <span class="rounded-full bg-primary-200/20 aspect-square shrink-0 size-12 flex justify-center items-center uppercase select-none">
+                      {c.name[0]}
+                    </span>
+                    <span class="font-medium mt-2">{c.name}</span>
+                    <span class="text-sm text-zinc-400">
+                      <Switch fallback={'Income and Expenses'}>
+                        <Match when={c.type === 'income'}>Income</Match>
+                        <Match when={c.type === 'expense'}>Expense</Match>
+                      </Switch>
+                    </span>
+                  </div>
+                )}
+              </For>
+            </div>
+          </Show>
+        </Match>
+      </Switch>
     </section>
   )
 }
