@@ -15,7 +15,7 @@ export const CategoriesList = () => {
   }))
 
   return (
-    <section class="container mx-auto">
+    <section class="container mx-auto mt-4">
       <Switch>
         <Match when={query.isPending}>
           <p class="mt-4 mx-auto">Loading...</p>
@@ -36,13 +36,13 @@ export const CategoriesList = () => {
             <div class="flex flex-wrap justify-center gap-4">
               <For each={query.data?.data}>
                 {(c) => (
-                  <div class="flex flex-col items-center p-4 border border-white/10 rounded-lg">
+                  <div class="flex flex-col items-center p-4 border border-white/10 rounded-lg w-36">
                     <span class="rounded-full bg-primary-200/20 aspect-square shrink-0 size-12 flex justify-center items-center uppercase select-none">
                       {c.name[0]}
                     </span>
-                    <span class="font-medium mt-2">{c.name}</span>
-                    <span class="text-sm text-zinc-400">
-                      <Switch fallback={'Income and Expenses'}>
+                    <span class="font-medium mt-2 text-center">{c.name}</span>
+                    <span class="text-sm text-zinc-400 text-center">
+                      <Switch fallback={'Income and Expense'}>
                         <Match when={c.type === 'income'}>Income</Match>
                         <Match when={c.type === 'expense'}>Expense</Match>
                       </Switch>
