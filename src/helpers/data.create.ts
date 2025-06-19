@@ -24,15 +24,15 @@ export const generateWalletData = (count: number = 1) =>
     }
   })
 
+const types = ['expense', 'income', 'both']
+
 export const generateCategoriesData = async (
   count: number = 1,
-  delay: number
+  delay?: number
 ) => {
   if (delay != null) {
     await sleep(delay)
   }
-
-  const types = ['expense', 'income', 'both']
 
   return Array.from({ length: count }).map(() => {
     const isActive = Math.random() >= 0.5
@@ -46,6 +46,38 @@ export const generateCategoriesData = async (
       type: pickRandom(types) as 'expense' | 'income' | 'both',
       updated_at: '',
       user_id: ''
+    }
+  })
+}
+
+export const generateTransactionsData = async (
+  count: number = 1,
+  delay?: number
+) => {
+  if (delay != null) {
+    await sleep(delay)
+  }
+
+  return Array.from({ length: count }).map(() => {
+    const max = 3250
+    const min = 5
+    const amount = Math.random() * max + min
+    const type = (Math.random() > 0.5 ? 'expense' : 'income') as
+      | 'expense'
+      | 'income'
+
+    return {
+      id: '',
+      user_id: '91e341af-c6cc-496c-8d7c-f1e94c4cf5dc',
+      wallet_id: 'Efectivo',
+      category_id: 'Food',
+      amount,
+      type,
+      description:
+        "This description is really long and shouldn't be a big deal to treat with it, idk man this is just really stupid",
+      transaction_date: new Date().toISOString(),
+      created_at: '',
+      updated_at: ''
     }
   })
 }
