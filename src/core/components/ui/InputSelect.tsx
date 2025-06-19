@@ -45,14 +45,14 @@ export const InputSelect = ({
     optionTextValue="label"
     optionDisabled="disabled"
     itemComponent={(props: SelectBaseItemComponentProps<SelectOption>) => (
-      <SelectItem item={props.item}>{props.item.rawValue.label}</SelectItem>
+      <SelectItem item={props.item}>{props.item.textValue}</SelectItem>
     )}
   >
     <Show when={hiddenSelect === true}>
       <SelectHiddenSelect />
     </Show>
     <SelectTrigger aria-label={ariaLabel} class={cn('w-48', className)}>
-      <SelectValue<SelectOption>>
+      <SelectValue<SelectOption> class="overflow-hidden overflow-ellipsis">
         {(state) => state.selectedOption().label}
       </SelectValue>
     </SelectTrigger>
