@@ -13,6 +13,11 @@ import { Input } from '@/core/components/ui/Input'
 import { InputLabel } from '@/core/components/ui/InputLabel'
 import { InputSelect } from '@/core/components/ui/InputSelect'
 import { Label } from '@/core/components/ui/Label'
+import { useAuthContext } from '@/core/context/auth/auth.provider'
+import { getCategories } from '@/core/controllers/categories.controller'
+import { createTransaction } from '@/core/controllers/transactions.controller'
+import { getWallets } from '@/core/controllers/wallets.controller'
+import { useQuery, useQueryClient } from '@tanstack/solid-query'
 import { createEffect, createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -26,13 +31,23 @@ interface CreateTransactionForm {
 }
 
 export const ButtonCreateTransaction = () => {
-  // const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
+  const { session } = useAuthContext()
 
-  // const { session } = useAuthContext()
   const [isOpen, setIsOpen] = createSignal(false)
   const [transactionData, setTransactionData] =
     createSignal<CreateTransactionForm>({})
-  const [error, setError] = createSignal('')
+  const [error, setError] = createSignal<string>()
+
+  const queryWallets = useQuery(() => ({
+    queryKey: ['wallets'],
+    queryFn: () => getWallets()
+  }))
+
+  const queryCategories = useQuery(() => ({
+    queryKey: ['categories'],
+    queryFn: () => getCategories()
+  }))
 
   const handleSubmitForm = async (
     e: SubmitEvent & {
@@ -42,26 +57,120 @@ export const ButtonCreateTransaction = () => {
   ) => {
     e.preventDefault()
 
-    if (transactionData().walletId == null) {
+    const { walletId, categoryId, amount, type, description, transactionDate } =
+      transactionData()
+
+    if (amount == null) {
+      setError('Please enter the amount')
+      return
+    }
+
+    if (walletId == null) {
       setError('Please select the wallet')
       return
     }
 
-    if (transactionData().type == null) {
+    if (type == null) {
       setError('Please select the type')
       return
     }
 
-    if (transactionData().amount == null) {
-      setError('Please select the amount')
+    if (type != null && type != 'income' && type != 'expense') {
+      setError('Invalid type')
+      return
+    }
+
+    if (categoryId == null) {
+      setError('Please select the category')
+      return
+    }
+
+    const userSession = session()
+
+    if (userSession == null) {
+      setError("Couldn't create the wallet, your session has expired")
+      return
+    }
+
+    const { user } = userSession
+
+    const { error } = await createTransaction({
+      user_id: user.id,
+      wallet_id: walletId,
+      category_id: categoryId,
+      amount,
+      type,
+      description,
+      transaction_date: (transactionDate ?? new Date()).toISOString()
+    })
+
+    if (error != null) {
+      setError('Unexpected error creating the transaction, please try again')
       return
     }
 
     setIsOpen(false)
+
+    queryClient.invalidateQueries({ queryKey: ['transactions'] })
   }
+
+  const [currentWallet, setCurrentWallet] = createSignal<{
+    label: string
+    value: string
+    disabled?: boolean
+  }>()
+
+  createEffect(() => {
+    setTransactionData((prev) => {
+      setError()
+
+      return {
+        ...prev,
+        walletId: currentWallet()?.value
+      }
+    })
+  })
+
+  const [currentType, setCurrentType] = createSignal<{
+    label: string
+    value: string
+    disabled?: boolean
+  }>()
+
+  createEffect(() => {
+    setTransactionData((prev) => {
+      setError()
+
+      return {
+        ...prev,
+        type: currentType()?.value
+      }
+    })
+  })
+
+  const [currentCategory, setCurrentCategory] = createSignal<{
+    label: string
+    value: string
+    disabled?: boolean
+  }>()
+
+  createEffect(() => {
+    setTransactionData((prev) => {
+      setError()
+
+      return {
+        ...prev,
+        categoryId: currentCategory()?.value
+      }
+    })
+  })
 
   const resetForm = () => {
     setTransactionData({})
+    setError()
+    setCurrentWallet()
+    setCurrentType()
+    setCurrentCategory()
   }
 
   createEffect(() => {
@@ -83,17 +192,31 @@ export const ButtonCreateTransaction = () => {
             Enter your transaction details to create one
           </DialogDescription>
         </DialogHeader>
+
         <form
           class="flex flex-col gap-4"
           id="create-transaction-form"
           onSubmit={handleSubmitForm}
         >
           <InputLabel
+            text="Amount"
+            type="number"
+            value={transactionData().amount}
+            onChange={(e) => {
+              setError()
+              setTransactionData((prev) => ({
+                ...prev,
+                amount: parseFloat(e.target.value)
+              }))
+            }}
+          />
+
+          <InputLabel
             text="Description"
             type="text"
             value={transactionData().description}
             onChange={(e) => {
-              setError('')
+              setError()
               setTransactionData((prev) => ({ ...prev, name: e.target.value }))
             }}
           />
@@ -101,42 +224,48 @@ export const ButtonCreateTransaction = () => {
           <Label text="Wallet">
             <InputSelect
               class="w-full"
-              options={[
-                { value: 'bcp', label: 'BCP' },
-                {
-                  value: 'caja-arequipa',
-                  label: 'Caja Arequipa'
-                }
-              ]}
+              options={
+                queryWallets.data?.data?.map((w) => ({
+                  label: w.name,
+                  value: w.id
+                })) ?? []
+              }
               placeholder="Select a wallet"
-              aria-label="Transaction type"
+              aria-label="Transaction wallet"
+              value={currentWallet()}
+              onChange={setCurrentWallet}
+              hiddenSelect
             />
           </Label>
 
-          <Label text="Category">
+          <Label text="Type">
             <InputSelect
               class="w-full"
               options={[
-                { value: 'food', label: 'Food' },
-                {
-                  value: 'transport',
-                  label: 'Transporte'
-                }
+                { value: 'income', label: 'Income' },
+                { value: 'expense', label: 'Expense' }
               ]}
-              placeholder="Select a category"
-              aria-label="Category"
+              placeholder="Select a type"
+              aria-label="Transaction type"
+              value={currentType()}
+              onChange={setCurrentType}
             />
           </Label>
 
           <div class="flex gap-4 items-stretch">
-            <Label text="Type" class="grow">
+            <Label text="Category" class="grow">
               <InputSelect
-                options={[
-                  { value: 'income', label: 'Income' },
-                  { value: 'expense', label: 'Expense' }
-                ]}
-                placeholder="Select a type"
-                aria-label="Transaction type"
+                class="w-full"
+                options={
+                  queryCategories.data?.data?.map((c) => ({
+                    label: c.name,
+                    value: c.id
+                  })) ?? []
+                }
+                placeholder="Select a category"
+                aria-label="Category"
+                value={currentCategory()}
+                onChange={setCurrentCategory}
               />
             </Label>
 
@@ -145,9 +274,10 @@ export const ButtonCreateTransaction = () => {
             </Label>
           </div>
         </form>
+
         <DialogFooter>
           <div class='class="flex flex-col"'>
-            <Show when={error().length > 0}>
+            <Show when={error() != null}>
               <p class="text-red-400 text-sm my-2">{error()}</p>
             </Show>
             <ButtonFilledTonal
