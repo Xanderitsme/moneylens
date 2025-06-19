@@ -14,6 +14,7 @@ import { InputSelect } from '@/core/components/ui/InputSelect'
 import { Label } from '@/core/components/ui/Label'
 import { useAuthContext } from '@/core/context/auth/auth.provider'
 import { createCategory } from '@/core/controllers/categories.controller'
+import { useQueryClient } from '@tanstack/solid-query'
 import { createEffect, createSignal, Show } from 'solid-js'
 import type { DOMElement } from 'solid-js/jsx-runtime'
 
@@ -23,6 +24,7 @@ interface CreateCategoryForm {
 }
 
 export const ButtonCreateCategory = () => {
+  const queryClient = useQueryClient()
   const { session } = useAuthContext()
 
   const [isOpen, setIsOpen] = createSignal(false)
@@ -91,6 +93,8 @@ export const ButtonCreateCategory = () => {
     }
 
     setIsOpen(false)
+
+    queryClient.invalidateQueries({ queryKey: ['categories'] })
   }
 
   const resetForm = () => {
