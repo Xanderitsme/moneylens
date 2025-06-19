@@ -217,7 +217,10 @@ export const ButtonCreateTransaction = () => {
             value={transactionData().description}
             onChange={(e) => {
               setError()
-              setTransactionData((prev) => ({ ...prev, name: e.target.value }))
+              setTransactionData((prev) => ({
+                ...prev,
+                description: e.target.value
+              }))
             }}
           />
 
@@ -270,7 +273,18 @@ export const ButtonCreateTransaction = () => {
             </Label>
 
             <Label text="Date" class="grow">
-              <Input type="date" class="w-full h-full" />
+              <Input
+                type="date"
+                class="w-full h-full"
+                value={transactionData().transactionDate?.toISOString()}
+                onChange={(e) => {
+                  setError()
+                  setTransactionData((prev) => ({
+                    ...prev,
+                    transactionDate: new Date(e.target.value)
+                  }))
+                }}
+              />
             </Label>
           </div>
         </form>
