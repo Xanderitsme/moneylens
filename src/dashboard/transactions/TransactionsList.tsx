@@ -38,22 +38,31 @@ export const TransactionsList = () => {
               <For each={query.data?.data}>
                 {(t) => (
                   <li class="flex gap-3 p-2 bg-zinc-900 rounded-lg shadow items-center border border-zinc-800 hover:border-primary-300/20">
-                    <div class="aspect-square rounded-full bg-zinc-800 size-12"></div>
+                    <div class="flex flex-col justify-center gap-1 aspect-square shrink-0 w-20 overflow-hidden">
+                      <span class="mx-auto rounded-full bg-primary-200/20 aspect-square shrink-0 size-12 flex justify-center items-center uppercase select-none">
+                        {t.category_id[0]}
+                      </span>
+                      <span class="text-center text-sm overflow-hidden text-ellipsis text-nowrap">
+                        {t.category_id}
+                      </span>
+                    </div>
 
                     <div class="flex flex-col overflow-hidden">
-                      <span class="text-primary-50 font-medium text-nowrap overflow-hidden text-ellipsis">
-                        {t.description}
-                      </span>
+                      <Show when={t.description != null}>
+                        <span class="text-primary-50 font-medium text-nowrap overflow-hidden text-ellipsis">
+                          {t.description}
+                        </span>
+                      </Show>
 
                       <span class="font-medium text-zinc-400 text-sm">
-                        {new Date(t.transaction_date).toLocaleDateString(
-                          'es-PE',
-                          {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          }
-                        )}
+                        {new Date(
+                          new Date(t.transaction_date).getTime() +
+                            1000 * 60 * 60 * 5
+                        ).toLocaleDateString('es-PE', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
                       </span>
 
                       <span class="text-zinc-400 text-sm">{t.wallet_id}</span>
